@@ -1,0 +1,250 @@
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Area, ResultAreas } from 'src/app/interface/area';
+import { Prioridad, ResultPrioridades } from 'src/app/interface/prioridad';
+import {
+  ResultTramiteInternos,
+  TramiteInterno,
+} from 'src/app/interface/tramite.interno';
+import { AreaService } from 'src/app/services/area.service';
+import { TramiteInternoService } from 'src/app/services/tramite-interno.service';
+import { PrioridadService } from '../../services/prioridad.service';
+import { IDropdownSettings } from 'ng-multiselect-dropdown';
+import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
+import { RutaInternaService } from 'src/app/services/ruta-interna.service';
+import { EnvioTramiteInterno } from 'src/app/interface/envio-tramite-interno';
+
+export interface DropList{
+  item_id:number,
+  item_text:string
+}
+@Component({
+  selector: 'app-tramite-interno',
+  templateUrl: './tramite-interno.component.html',
+  styleUrls: ['./tramite-interno.component.css']
+})
+export class TramiteInternoComponent implements OnInit {
+  listTramiteInterno?: TramiteInterno[];
+  listPrioridad?: Prioridad[];
+  listArea: Area[]=[];
+  tramiteForm: FormGroup;
+  rutaForm: FormGroup;
+  ids?: string;
+  dropdownSettingsUni:IDropdownSettings = {};
+  dropdownSettings:IDropdownSettings = {};
+  dropdownList =[{}];
+  dropDownListUni=[{}];
+  codigo:string='';
+  // Select Multiple
+  // Fin select multiple
+  constructor(
+    private fb: FormBuilder,
+    private tramiteInterService: TramiteInternoService,
+    private prioridadService: PrioridadService,
+    private areaService: AreaService,
+    private rutaService:RutaInternaService,
+    private toastr:ToastrService
+  ) {
+    this.tramiteForm = this.fb.group({
+      asunto: ['', Validators.required],
+      observacion: [''],
+      folio: [Number, Validators.required],
+      prioridad: ['', Validators.required],
+      
+    });
+    this.rutaForm = this.fb.group({
+      destinoUno: [[]],
+      destinoDos: [[]],
+      cantidad: ['', Validators.required],
+      
+    })
+  }
+
+  ngOnInit(): void {
+    this.mostrarTramite();
+    this.mostrarPrioridad();
+    this.mostrarAreas();
+   
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'id',
+      textField: 'nombre',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 3,
+      allowSearchFilter: true
+    };
+    this.dropdownSettingsUni={
+      singleSelection: true,
+      idField: 'id',
+      textField: 'nombre',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      allowSearchFilter: true,
+      closeDropDownOnSelection: false
+    }
+  }
+  mostrarTramite() {
+    this.tramiteInterService.getTramiteInternos().subscribe(
+      (data: ResultTramiteInternos) => {
+        this.listTramiteInterno = data.tramiteInterno;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+  mostrarPrioridad() {
+    this.prioridadService.getPrioridades('1').subscribe(
+      (data: ResultPrioridades) => {
+        this.listPrioridad = data.prioridad;
+      },
+      (error) => {
+        console.log(error);
+
+      }
+    )
+  }
+  mostrarAreas() {
+    this.areaService.getAreas('1').subscribe(
+      (data: ResultAreas) => {
+        this.listArea = data.area;
+        
+        for (let i = 0; i < this.listArea.length; i++) {
+          const obj={item_id:this.listArea[i].id,item_text:this.listArea[i].nombre}
+          this.dropdownList.push(obj);
+          
+        }
+        for (let i = 0; i < this.listArea.length; i++) {
+          const obj={item_id:this.listArea[i].id,item_text:this.listArea[i].nombre}
+          this.dropDownListUni.push(obj);
+          
+        }
+      },
+      (error) => {
+        console.log(error);
+
+      }
+    )
+  }
+  crearRuta(){
+    const cantidad = this.rutaForm.get('cantidad')?.value;
+    const destinoUno = this.rutaForm.get('destinoUno')?.value;
+    const destinoDos = this.rutaForm.get('destinoDos')?.value;
+    
+    
+    
+    if (cantidad==='1' && destinoUno.length>=1) {
+      console.log(destinoUno);
+      const envio:EnvioTramiteInterno={
+        cantidad,
+        codigo:this.codigo,
+        id_destino:destinoUno
+      }
+      this.rutaService.postRutaInterna(envio).subscribe(
+        (data)=>{
+          console.log(data);
+          
+        },
+        (error)=>{
+          console.log(error);
+          
+        }
+      )
+        
+    }else if (cantidad==='2' && destinoDos.length>=1) {
+      const envio:EnvioTramiteInterno={
+        cantidad,
+        codigo:this.codigo,
+        id_destino:destinoDos
+      }
+      this.rutaService.postRutaInterna(envio).subscribe(
+        (data)=>{
+          console.log(data);
+          
+        },
+        (error)=>{
+          console.log(error);
+          
+        }
+      )
+      
+    }else{
+      
+      Swal.fire({
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Seleccione un destino',
+        showConfirmButton: false,
+        timer: 1500
+      })
+      
+    }
+  }
+  agregarCodigo(cod:string){
+    console.log(cod);
+    
+    this.codigo = cod;
+    
+    
+  }
+  verTipoRuta(event:any){    
+    if (event.target.value !== "" && event.target.value === "1") {
+      document.getElementById('seleTwo')?.classList.remove('invi');
+      document.getElementById('seleOne')?.classList.add('invi');
+    }
+    if (event.target.value !== "" && event.target.value=== '2') {
+      document.getElementById('seleTwo')?.classList.add('invi')
+      document.getElementById('seleOne')?.classList.remove('invi');
+    }
+    if (event.target.value === "") {
+      document.getElementById('seleTwo')?.classList.add('invi')
+      document.getElementById('seleOne')?.classList.add('invi');
+    }
+  }
+  crearRditarTramite() {
+    if (this.ids === undefined) {
+      const formData = new FormData();
+      formData.append('asunto', this.tramiteForm.get('asunto')?.value);
+      formData.append('observacion', this.tramiteForm.get('observacion')?.value);
+      formData.append('folio', this.tramiteForm.get('folio')?.value);
+      formData.append('prioridad', this.tramiteForm.get('prioridad')?.value);
+      this.tramiteInterService.postTramiteInterno(formData).subscribe(
+        (data) => {
+          this.tramiteForm.setValue({
+            asunto: '',
+            observacion: '',
+            folio: Number,
+            prioridad: ''
+          })
+          this.mostrarTramite();
+
+        },
+        (error) => {
+          console.log(error);
+
+        }
+      )
+    } else {
+      console.log('hi');
+
+    }
+  }
+  cancelar() {
+    this.ids = undefined
+    this.tramiteForm.setValue({
+      asunto: '',
+      observacion: '',
+      folio: Number,
+      prioridad: ''
+    });
+    this.rutaForm.setValue({
+      destinoUno: [],
+      destinoDos: [],
+      cantidad: ''
+    });
+    document.getElementById('seleTwo')?.classList.add('invi')
+      document.getElementById('seleOne')?.classList.add('invi');
+  }
+}
