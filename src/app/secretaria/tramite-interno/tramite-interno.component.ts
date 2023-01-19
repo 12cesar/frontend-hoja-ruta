@@ -14,6 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import { RutaInternaService } from 'src/app/services/ruta-interna.service';
 import { EnvioTramiteInterno } from 'src/app/interface/envio-tramite-interno';
+import { ResultRutaInterna } from 'src/app/interface/ruta.interna';
 
 export interface DropList{
   item_id:number,
@@ -107,7 +108,7 @@ export class TramiteInternoComponent implements OnInit {
     )
   }
   mostrarAreas() {
-    this.areaService.getAreas('1').subscribe(
+    this.areaService.getAreasSin().subscribe(
       (data: ResultAreas) => {
         this.listArea = data.area;
         
@@ -132,9 +133,6 @@ export class TramiteInternoComponent implements OnInit {
     const cantidad = this.rutaForm.get('cantidad')?.value;
     const destinoUno = this.rutaForm.get('destinoUno')?.value;
     const destinoDos = this.rutaForm.get('destinoDos')?.value;
-    
-    
-    
     if (cantidad==='1' && destinoUno.length>=1) {
       console.log(destinoUno);
       const envio:EnvioTramiteInterno={
@@ -145,10 +143,22 @@ export class TramiteInternoComponent implements OnInit {
       this.rutaService.postRutaInterna(envio).subscribe(
         (data)=>{
           console.log(data);
-          
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: data.msg,
+            showConfirmButton: false,
+            timer: 1500
+          })
         },
         (error)=>{
-          console.log(error);
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: error.error.msg,
+            showConfirmButton: false,
+            timer: 1500
+          })
           
         }
       )
@@ -161,17 +171,27 @@ export class TramiteInternoComponent implements OnInit {
       }
       this.rutaService.postRutaInterna(envio).subscribe(
         (data)=>{
-          console.log(data);
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: data.msg,
+            showConfirmButton: false,
+            timer: 1500
+          })
           
         },
         (error)=>{
-          console.log(error);
-          
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: error.error.msg,
+            showConfirmButton: false,
+            timer: 1500
+          })
         }
       )
       
     }else{
-      
       Swal.fire({
         position: 'top-end',
         icon: 'warning',
@@ -184,9 +204,38 @@ export class TramiteInternoComponent implements OnInit {
   }
   agregarCodigo(cod:string){
     console.log(cod);
-    
     this.codigo = cod;
-    
+    this.rutaService.getRutaInterna(this.codigo).subscribe(
+      (data:ResultRutaInterna)=>{
+        if ( String(data.rutaInterna.cantidad)=== "1") {
+          document.getElementById('seleTwo')?.classList.remove('invi');
+          document.getElementById('seleOne')?.classList.add('invi');
+          this.rutaForm.setValue({
+            destinoUno: data.area,
+            destinoDos: [{}],
+            cantidad: String(data.rutaInterna.cantidad)
+          });
+        }
+        if (String(data.rutaInterna.cantidad)=== '2') {
+          document.getElementById('seleTwo')?.classList.add('invi')
+          document.getElementById('seleOne')?.classList.remove('invi');
+          this.rutaForm.setValue({
+            destinoUno: [{}],
+            destinoDos: data.area,
+            cantidad: String(data.rutaInterna.cantidad)
+          });
+        }
+        if ( !data.rutaInterna.cantidad) {
+          document.getElementById('seleTwo')?.classList.add('invi')
+          document.getElementById('seleOne')?.classList.add('invi');
+        }
+                
+      },
+      (error)=>{
+        console.log(error);
+        
+      }
+    )
     
   }
   verTipoRuta(event:any){    
@@ -209,7 +258,7 @@ export class TramiteInternoComponent implements OnInit {
       formData.append('asunto', this.tramiteForm.get('asunto')?.value);
       formData.append('observacion', this.tramiteForm.get('observacion')?.value);
       formData.append('folio', this.tramiteForm.get('folio')?.value);
-      formData.append('prioridad', this.tramiteForm.get('prioridad')?.value);
+      formData.append('id_prioridad', this.tramiteForm.get('prioridad')?.value);
       this.tramiteInterService.postTramiteInterno(formData).subscribe(
         (data) => {
           this.tramiteForm.setValue({

@@ -15,6 +15,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import {MatSelectModule} from '@angular/material/select';
 import { MaterialModule } from '../material/material.module';
 import { ToastrModule } from 'ngx-toastr';
+import { SeguimientoDerivacionInternaComponent } from './seguimiento-derivacion-interna/seguimiento-derivacion-interna.component';
+import { SeguimientoDerivacionExternaComponent } from './seguimiento-derivacion-externa/seguimiento-derivacion-externa.component';
+import { TramiteGlobalInternoComponent } from './tramite-global-interno/tramite-global-interno.component';
+import { TramiteGlobalExternoComponent } from './tramite-global-externo/tramite-global-externo.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +27,11 @@ import { ToastrModule } from 'ngx-toastr';
     SeguimientoInternoComponent,
     DerivacionInternoComponent,
     SecretariaComponent,
-    DashboardComponent
+    DashboardComponent,
+    SeguimientoDerivacionInternaComponent,
+    SeguimientoDerivacionExternaComponent,
+    TramiteGlobalInternoComponent,
+    TramiteGlobalExternoComponent
   ],
   exports:[
     TramiteInternoComponent,

@@ -15,6 +15,9 @@ export class RutaInternaService {
   getRutaInternas():Observable<any>{
     return this.http.get(this.url);
   }
+  getTramiteDerivado():Observable<any>{
+    return this.http.get(`${this.url}/tramite/derivado`);
+  }
   getRutaInterna(codigo:string):Observable<any>{
     return this.http.get(`${this.url}/${codigo}`)
   }

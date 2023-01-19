@@ -1,20 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { apiHojaRuta } from '../api/apiHojaRuta';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AreaService {
-  url = `${apiHojaRuta}/area`;
+export class DerivarInternoService {
+  url = `${apiHojaRuta}/derivar-interno`;
   constructor(private http: HttpClient, private router:Router) { }
-
-  getAreas(estado:string):Observable<any>{
-    return this.http.get(this.url,{params:{estado}});
-  }
-  getAreasSin():Observable<any>{
-    return this.http.get(`${this.url}/sin/area`);
+  postDerivar(formData:FormData):Observable<any>{
+    return this.http.post(this.url,formData);
   }
 }

@@ -9,6 +9,7 @@ export interface ResultRutaInterna {
     ok:          boolean;
     msg:         string;
     rutaInterna: RutaInterna;
+    area:        Area[];
 }
 
 
@@ -34,3 +35,9 @@ export interface TramiteInterno {
     id_prioridad:     number;
     id_area:          number;
 }
+
+export interface Area {
+    id:     number;
+    nombre: string;
+}
+

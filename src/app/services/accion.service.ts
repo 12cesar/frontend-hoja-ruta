@@ -7,14 +7,10 @@ import { apiHojaRuta } from '../api/apiHojaRuta';
 @Injectable({
   providedIn: 'root'
 })
-export class AreaService {
-  url = `${apiHojaRuta}/area`;
+export class AccionService {
+  url = `${apiHojaRuta}/acciones`;
   constructor(private http: HttpClient, private router:Router) { }
-
-  getAreas(estado:string):Observable<any>{
-    return this.http.get(this.url,{params:{estado}});
-  }
-  getAreasSin():Observable<any>{
-    return this.http.get(`${this.url}/sin/area`);
+  getAcciones(estado:string):Observable<any>{
+    return this.http.get(this.url,{params:{estado}})
   }
 }
