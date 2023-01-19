@@ -7,13 +7,10 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class DerivarInternoService {
-  url = `${apiHojaRuta}/derivar-interno`;
+export class RespuestaService {
+  url = `${apiHojaRuta}/respuesta`;
   constructor(private http: HttpClient, private router:Router) { }
-  postDerivar(formData:FormData):Observable<any>{
-    return this.http.post(this.url,formData);
-  }
-  getDerivaciones():Observable<any>{
-    return this.http.get(this.url);
+  getRespuesta(estado:string):Observable<any>{
+    return this.http.get(this.url,{params:{estado}});
   }
 }
