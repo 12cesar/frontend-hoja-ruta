@@ -15,13 +15,6 @@ export class SidebarSecreService {
       ]
     },
     {
-      titulo: 'Tramite Externo',
-      icono: 'mdi mdi-file-export',
-      submenu: [
-        { titulo: 'Generar Tramite Interno', url: 'tramite-externo' },
-      ]
-    },
-    {
       titulo: 'Derivaciones',
       icono: 'mdi mdi-call-received',
       submenu: [

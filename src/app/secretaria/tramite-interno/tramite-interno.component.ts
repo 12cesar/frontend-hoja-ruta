@@ -34,6 +34,7 @@ export class TramiteInternoComponent implements OnInit {
   ids?: string;
   dropdownSettingsUni:IDropdownSettings = {};
   dropdownSettings:IDropdownSettings = {};
+
   dropdownList =[{}];
   dropDownListUni=[{}];
   codigo:string='';
@@ -52,13 +53,13 @@ export class TramiteInternoComponent implements OnInit {
       observacion: [''],
       folio: [Number, Validators.required],
       prioridad: ['', Validators.required],
-      
+
     });
     this.rutaForm = this.fb.group({
       destinoUno: [[]],
       destinoDos: [[]],
       cantidad: ['', Validators.required],
-      
+
     })
   }
 
@@ -66,7 +67,7 @@ export class TramiteInternoComponent implements OnInit {
     this.mostrarTramite();
     this.mostrarPrioridad();
     this.mostrarAreas();
-   
+
     this.dropdownSettings = {
       singleSelection: false,
       idField: 'id',
@@ -111,16 +112,15 @@ export class TramiteInternoComponent implements OnInit {
     this.areaService.getAreasSin().subscribe(
       (data: ResultAreas) => {
         this.listArea = data.area;
-        
+
         for (let i = 0; i < this.listArea.length; i++) {
           const obj={item_id:this.listArea[i].id,item_text:this.listArea[i].nombre}
           this.dropdownList.push(obj);
-          
         }
         for (let i = 0; i < this.listArea.length; i++) {
           const obj={item_id:this.listArea[i].id,item_text:this.listArea[i].nombre}
           this.dropDownListUni.push(obj);
-          
+
         }
       },
       (error) => {
@@ -159,10 +159,10 @@ export class TramiteInternoComponent implements OnInit {
             showConfirmButton: false,
             timer: 1500
           })
-          
+
         }
       )
-        
+
     }else if (cantidad==='2' && destinoDos.length>=1) {
       const envio:EnvioTramiteInterno={
         cantidad,
@@ -178,7 +178,7 @@ export class TramiteInternoComponent implements OnInit {
             showConfirmButton: false,
             timer: 1500
           })
-          
+
         },
         (error)=>{
           Swal.fire({
@@ -190,7 +190,7 @@ export class TramiteInternoComponent implements OnInit {
           })
         }
       )
-      
+
     }else{
       Swal.fire({
         position: 'top-end',
@@ -199,7 +199,7 @@ export class TramiteInternoComponent implements OnInit {
         showConfirmButton: false,
         timer: 1500
       })
-      
+
     }
   }
   agregarCodigo(cod:string){
@@ -229,16 +229,16 @@ export class TramiteInternoComponent implements OnInit {
           document.getElementById('seleTwo')?.classList.add('invi')
           document.getElementById('seleOne')?.classList.add('invi');
         }
-                
+
       },
       (error)=>{
         console.log(error);
-        
+
       }
     )
-    
+
   }
-  verTipoRuta(event:any){    
+  verTipoRuta(event:any){
     if (event.target.value !== "" && event.target.value === "1") {
       document.getElementById('seleTwo')?.classList.remove('invi');
       document.getElementById('seleOne')?.classList.add('invi');

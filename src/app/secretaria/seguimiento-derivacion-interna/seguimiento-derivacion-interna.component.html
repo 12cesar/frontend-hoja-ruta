@@ -47,7 +47,7 @@
         </td>
         <td *ngIf="tramite.estado_recepcion===1">
             <a class="btn btn-circle btn-info ml-2" data-toggle="modal" data-target="#respuestaModal"
-            data-whatever="@mdo"> <i
+            data-whatever="@mdo" (click)="obtenerDatos(tramite.codigo_tramite, tramite.id)"> <i
                 class="mdi mdi-tooltip-edit"></i></a>
         </td>
       </tr>
@@ -65,29 +65,47 @@
         </button>
       </div>
       <div class="modal-body">
-        <form>
+        <form [formGroup]="formRespuesta" (ngSubmit)="responderTramite()">
           <div class="form-group">
             <label class="control-label">Seleccionar Tipo de Respuesta</label>
-            <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" (click)="verTipoRuta($event)"> 
+            <select class="form-control custom-select" formControlName="respuesta" data-placeholder="Choose a Category" tabindex="1" (click)="verTipoRuta($event)">
                 <option value="">Seleccionar tipo de respuesta</option>
                 <option *ngFor="let respuesta of listRespuesta" value="{{respuesta.id}}">{{respuesta.nombre}}</option>
             </select>
           </div>
-          <div class="invi one">
+          <div class="invi" id="selectOne">
+            <div class="form-group">
+              <label class="control-label">Seleccionar Area</label>
+                        <ng-multiselect-dropdown
+                        [placeholder]="'Seleccionar el destino'"
+                        name="city"
+                        [data]="listArea!"
+                        [settings]="dropdownSettings"
+                        formControlName="destino"
+                        [disabled]="false"
+                        >
+                        </ng-multiselect-dropdown>
+            </div>
             <div class="form-group">
               <label class="control-label">Seleccionar Accion</label>
-              <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" (click)="verTipoRuta($event)"> 
+              <select class="form-control custom-select" formControlName="accion" data-placeholder="Choose a Category" tabindex="1">
                   <option value="">Seleccionar accion</option>
                   <option *ngFor="let accion of listAcciones" value="{{accion.id}}">{{accion.nombre}}</option>
               </select>
             </div>
-          </div>          
-          <div class="form-group">
-            <label for="exampleFormControlTextarea1">Observacion</label>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+            <div class="form-group">
+              <label for="exampleFormControlTextarea1">Observacion</label>
+              <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" formControlName="observacion"></textarea>
+            </div>
           </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                (click)="cancelar()">Cerrar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="formRespuesta.invalid">Crear Ruta</button>
+        </div>
         </form>
-       
+
       </div>
     </div>
   </div>
