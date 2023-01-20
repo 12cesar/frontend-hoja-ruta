@@ -172,6 +172,13 @@ export class SeguimientoDerivacionInternaComponent implements OnInit {
             this.mostrarDerivacion();
             console.log(data);
             this.idDerivado =0;
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: 'Respuesta generado con exito',
+              showConfirmButton: false,
+              timer: 1500
+            })
           },(error)=>{
             console.log(error);
 
@@ -179,6 +186,13 @@ export class SeguimientoDerivacionInternaComponent implements OnInit {
         )
       }else{
         console.log('Selecciona un nuevo tramite');
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'Todos los campos son requeridos',
+          showConfirmButton: false,
+          timer: 1500
+        })
       }
     }else if (this.tipoRespuesta === '2') {
       console.log('derivado');
@@ -192,6 +206,13 @@ export class SeguimientoDerivacionInternaComponent implements OnInit {
           console.log(data);
           this.mostrarDerivacion();
           this.idDerivado=0;
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Respuesta generado con exito',
+            showConfirmButton: false,
+            timer: 1500
+          })
         },
         (error)=>{
           console.log(error);
@@ -200,6 +221,13 @@ export class SeguimientoDerivacionInternaComponent implements OnInit {
       )
      }else{
       console.log('Selecciona un nuevo tramite');
+      Swal.fire({
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Selecciona un nuevo tramite',
+        showConfirmButton: false,
+        timer: 1500
+      })
 
      }
 

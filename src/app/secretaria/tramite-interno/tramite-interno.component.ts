@@ -268,7 +268,13 @@ export class TramiteInternoComponent implements OnInit {
             prioridad: ''
           })
           this.mostrarTramite();
-
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: data.msg,
+            showConfirmButton: false,
+            timer: 1500
+          })
         },
         (error) => {
           console.log(error);
