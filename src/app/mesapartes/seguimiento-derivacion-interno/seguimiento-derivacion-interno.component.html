@@ -1,1 +1,211 @@
-<p>seguimiento-derivacion-interno works!</p>
+<h4 class="card-title">Muted Table</h4>
+<h6 class="card-subtitle">Add class <code>.color-table .muted-table</code></h6>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Tramite Interno</th>
+        <th>Asunto</th>
+        <th>Observacion</th>
+        <th>Registrado</th>
+        <th>Fecha</th>
+        <th>Mostrar Seguimiento</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let tramite of listDerivacion">
+        <td>{{ tramite.codigo_tramite }}</td>
+        <td>{{ tramite.TramiteInterno.asunto }}</td>
+        <td>{{ tramite.TramiteInterno.observacion }}</td>
+        <td>{{ tramite.TramiteInterno.folio }}</td>
+        <td>
+          {{ tramite.TramiteInterno.fecha }} - {{ tramite.TramiteInterno.hora }}
+        </td>
+        <td class="text-nowrap">
+          <a
+            class="btn btn-circle btn-success ml-2"
+            (click)="
+              obetenerDatos(
+                tramite.codigo_tramite,
+                tramite.TramiteInterno.asunto,
+                tramite.TramiteInterno.observacion,
+                tramite.TramiteInterno.fecha,
+                tramite.TramiteInterno.hora,
+                tramite.TramiteInterno.folio
+              )
+            "
+            data-toggle="modal"
+            data-target="#seguimientoModal"
+          >
+            <i class="fa fa-search"></i>
+          </a>
+        </td>
+        <td *ngIf="tramite.estado_recepcion===0">
+            <a class="btn btn-circle btn-warning ml-2" (click)="recepcionar(tramite.id)" data-whatever="@mdo"> <i
+                class="mdi mdi-call-received"></i></a>
+        </td>
+        <td *ngIf="tramite.estado_recepcion===1">
+            <a class="btn btn-circle btn-info ml-2" data-toggle="modal" data-target="#respuestaModal"
+            data-whatever="@mdo" (click)="obtenerDatos(tramite.codigo_tramite, tramite.id)"> <i
+                class="mdi mdi-tooltip-edit"></i></a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="modal fade" id="respuestaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Responder Tramite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelar()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="formRespuesta" (ngSubmit)="responderTramite()">
+          <div class="form-group">
+            <label class="control-label">Seleccionar Tipo de Respuesta</label>
+            <select class="form-control custom-select" formControlName="respuesta" data-placeholder="Choose a Category" tabindex="1" (click)="verTipoRuta($event)">
+                <option value="">Seleccionar tipo de respuesta</option>
+                <option *ngFor="let respuesta of listRespuesta" value="{{respuesta.id}}">{{respuesta.nombre}}</option>
+            </select>
+          </div>
+          <div class="invi" id="selectOne">
+            <div class="form-group">
+              <label class="control-label">Seleccionar Area</label>
+                        <ng-multiselect-dropdown
+                        [placeholder]="'Seleccionar el destino'"
+                        name="city"
+                        [data]="listArea!"
+                        [settings]="dropdownSettings"
+                        formControlName="destino"
+                        [disabled]="false"
+                        >
+                        </ng-multiselect-dropdown>
+            </div>
+            <div class="form-group">
+              <label class="control-label">Seleccionar Accion</label>
+              <select class="form-control custom-select" formControlName="accion" data-placeholder="Choose a Category" tabindex="1">
+                  <option value="">Seleccionar accion</option>
+                  <option *ngFor="let accion of listAcciones" value="{{accion.id}}">{{accion.nombre}}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="exampleFormControlTextarea1">Observacion</label>
+              <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" formControlName="observacion"></textarea>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                (click)="cancelar()">Cerrar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="formRespuesta.invalid">Crear Ruta</button>
+        </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="seguimientoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Seguimiento Tramite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelar()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="formSeguimiento">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-lg-12">
+                <input type="text" id="firstName" class="float-right" formControlName="fecha" />
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="" class="control-label">Tramite Interno N°</label>
+            <input type="text" id="firstName" class="form-control" formControlName="codigo_tramite"/>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Asunto</label>
+            <input type="text" id="firstName" class="form-control" formControlName="asunto" />
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">Observacion</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" formControlName="observacion"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Folio</label>
+            <input type="text" id="firstName" class="form-control" formControlName="folio" />
+          </div>
+        </form>
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ruta</h5>
+        </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Codigo</th>
+                <th>Destino</th>
+                <th>Fecha Derivado</th>
+                <th>Hora Derivado</th>
+                <th>Fecha Recepcionado</th>
+                <th>Hora Recepcionado</th>
+                <th>Respuesta</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let seguimiento of listSeguimiento">
+                <td>{{seguimiento.id_derivacion}}</td>
+                <td>{{seguimiento.DerivacionInterna.Area.nombre}}</td>
+                <td>{{seguimiento.fecha_derivacion}}</td>
+                <td>{{seguimiento.hora_derivacion}}</td>
+                <td>{{seguimiento.fecha_recepcion}}</td>
+                <td>{{seguimiento.hora_recepcion}}</td>
+                <td *ngIf="!seguimiento.DerivacionInterna.Respuestum">
+                  <div class="label label-table label-danger">En Proceso</div>
+                </td>
+                <td *ngIf="seguimiento.DerivacionInterna.Respuestum?.id===1">
+                  <div class="label label-table label-info">Derivado</div>
+                </td>
+                <td *ngIf="seguimiento.DerivacionInterna.Respuestum?.id===2">
+                  <div class="label label-table label-success">Archivado</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Observaciones</h5>
+        </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Codigo</th>
+                <th>Destino</th>
+                <th>Observaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let seguimiento of listSeguimiento">
+                <td>{{seguimiento.id_derivacion}}</td>
+                <td>{{seguimiento.DerivacionInterna.Area.nombre}}</td>
+                <td>{{seguimiento.DerivacionInterna.observacion}}</td>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

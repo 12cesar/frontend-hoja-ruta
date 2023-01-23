@@ -9,7 +9,7 @@ export class SidebarMpService {
       titulo: 'Tramite Externo',
       icono: 'mdi mdi-file-import',
       submenu: [
-        { titulo: 'Generar Tramite Interno', url: 'tramite-externo' },
+        { titulo: 'Generar Tramite Externo', url: 'tramite-externo' },
         { titulo: 'Derivacion Tramite Interno', url: 'derivacion-externo' },
         { titulo: 'Seguimiento Tramite Interno', url: 'seguimiento-externo' },
       ]

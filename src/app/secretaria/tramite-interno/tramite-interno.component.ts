@@ -16,9 +16,9 @@ import { RutaInternaService } from 'src/app/services/ruta-interna.service';
 import { EnvioTramiteInterno } from 'src/app/interface/envio-tramite-interno';
 import { ResultRutaInterna } from 'src/app/interface/ruta.interna';
 
-export interface DropList{
-  item_id:number,
-  item_text:string
+export interface DropList {
+  item_id: number,
+  item_text: string
 }
 @Component({
   selector: 'app-tramite-interno',
@@ -28,16 +28,16 @@ export interface DropList{
 export class TramiteInternoComponent implements OnInit {
   listTramiteInterno?: TramiteInterno[];
   listPrioridad?: Prioridad[];
-  listArea: Area[]=[];
+  listArea: Area[] = [];
   tramiteForm: FormGroup;
   rutaForm: FormGroup;
   ids?: string;
-  dropdownSettingsUni:IDropdownSettings = {};
-  dropdownSettings:IDropdownSettings = {};
+  dropdownSettingsUni: IDropdownSettings = {};
+  dropdownSettings: IDropdownSettings = {};
 
-  dropdownList =[{}];
-  dropDownListUni=[{}];
-  codigo:string='';
+  dropdownList = [{}];
+  dropDownListUni = [{}];
+  codigo: string = '';
   // Select Multiple
   // Fin select multiple
   constructor(
@@ -45,8 +45,8 @@ export class TramiteInternoComponent implements OnInit {
     private tramiteInterService: TramiteInternoService,
     private prioridadService: PrioridadService,
     private areaService: AreaService,
-    private rutaService:RutaInternaService,
-    private toastr:ToastrService
+    private rutaService: RutaInternaService,
+    private toastr: ToastrService
   ) {
     this.tramiteForm = this.fb.group({
       asunto: ['', Validators.required],
@@ -77,7 +77,7 @@ export class TramiteInternoComponent implements OnInit {
       itemsShowLimit: 3,
       allowSearchFilter: true
     };
-    this.dropdownSettingsUni={
+    this.dropdownSettingsUni = {
       singleSelection: true,
       idField: 'id',
       textField: 'nombre',
@@ -114,11 +114,11 @@ export class TramiteInternoComponent implements OnInit {
         this.listArea = data.area;
 
         for (let i = 0; i < this.listArea.length; i++) {
-          const obj={item_id:this.listArea[i].id,item_text:this.listArea[i].nombre}
+          const obj = { item_id: this.listArea[i].id, item_text: this.listArea[i].nombre }
           this.dropdownList.push(obj);
         }
         for (let i = 0; i < this.listArea.length; i++) {
-          const obj={item_id:this.listArea[i].id,item_text:this.listArea[i].nombre}
+          const obj = { item_id: this.listArea[i].id, item_text: this.listArea[i].nombre }
           this.dropDownListUni.push(obj);
 
         }
@@ -129,19 +129,19 @@ export class TramiteInternoComponent implements OnInit {
       }
     )
   }
-  crearRuta(){
+  crearRuta() {
     const cantidad = this.rutaForm.get('cantidad')?.value;
     const destinoUno = this.rutaForm.get('destinoUno')?.value;
     const destinoDos = this.rutaForm.get('destinoDos')?.value;
-    if (cantidad==='1' && destinoUno.length>=1) {
+    if (cantidad === '1' && destinoUno.length >= 1) {
       console.log(destinoUno);
-      const envio:EnvioTramiteInterno={
+      const envio: EnvioTramiteInterno = {
         cantidad,
-        codigo:this.codigo,
-        id_destino:destinoUno
+        codigo: this.codigo,
+        id_destino: destinoUno
       }
       this.rutaService.postRutaInterna(envio).subscribe(
-        (data)=>{
+        (data) => {
           console.log(data);
           Swal.fire({
             position: 'top-end',
@@ -151,7 +151,7 @@ export class TramiteInternoComponent implements OnInit {
             timer: 1500
           })
         },
-        (error)=>{
+        (error) => {
           Swal.fire({
             position: 'top-end',
             icon: 'error',
@@ -163,14 +163,14 @@ export class TramiteInternoComponent implements OnInit {
         }
       )
 
-    }else if (cantidad==='2' && destinoDos.length>=1) {
-      const envio:EnvioTramiteInterno={
+    } else if (cantidad === '2' && destinoDos.length >= 1) {
+      const envio: EnvioTramiteInterno = {
         cantidad,
-        codigo:this.codigo,
-        id_destino:destinoDos
+        codigo: this.codigo,
+        id_destino: destinoDos
       }
       this.rutaService.postRutaInterna(envio).subscribe(
-        (data)=>{
+        (data) => {
           Swal.fire({
             position: 'top-end',
             icon: 'success',
@@ -180,7 +180,7 @@ export class TramiteInternoComponent implements OnInit {
           })
 
         },
-        (error)=>{
+        (error) => {
           Swal.fire({
             position: 'top-end',
             icon: 'error',
@@ -191,7 +191,7 @@ export class TramiteInternoComponent implements OnInit {
         }
       )
 
-    }else{
+    } else {
       Swal.fire({
         position: 'top-end',
         icon: 'warning',
@@ -202,12 +202,12 @@ export class TramiteInternoComponent implements OnInit {
 
     }
   }
-  agregarCodigo(cod:string){
+  agregarCodigo(cod: string) {
     console.log(cod);
     this.codigo = cod;
     this.rutaService.getRutaInterna(this.codigo).subscribe(
-      (data:ResultRutaInterna)=>{
-        if ( String(data.rutaInterna.cantidad)=== "1") {
+      (data: ResultRutaInterna) => {
+        if (String(data.rutaInterna.cantidad) === "1") {
           document.getElementById('seleTwo')?.classList.remove('invi');
           document.getElementById('seleOne')?.classList.add('invi');
           this.rutaForm.setValue({
@@ -216,7 +216,7 @@ export class TramiteInternoComponent implements OnInit {
             cantidad: String(data.rutaInterna.cantidad)
           });
         }
-        if (String(data.rutaInterna.cantidad)=== '2') {
+        if (String(data.rutaInterna.cantidad) === '2') {
           document.getElementById('seleTwo')?.classList.add('invi')
           document.getElementById('seleOne')?.classList.remove('invi');
           this.rutaForm.setValue({
@@ -225,25 +225,25 @@ export class TramiteInternoComponent implements OnInit {
             cantidad: String(data.rutaInterna.cantidad)
           });
         }
-        if ( !data.rutaInterna.cantidad) {
+        if (!data.rutaInterna.cantidad) {
           document.getElementById('seleTwo')?.classList.add('invi')
           document.getElementById('seleOne')?.classList.add('invi');
         }
 
       },
-      (error)=>{
+      (error) => {
         console.log(error);
 
       }
     )
 
   }
-  verTipoRuta(event:any){
+  verTipoRuta(event: any) {
     if (event.target.value !== "" && event.target.value === "1") {
       document.getElementById('seleTwo')?.classList.remove('invi');
       document.getElementById('seleOne')?.classList.add('invi');
     }
-    if (event.target.value !== "" && event.target.value=== '2') {
+    if (event.target.value !== "" && event.target.value === '2') {
       document.getElementById('seleTwo')?.classList.add('invi')
       document.getElementById('seleOne')?.classList.remove('invi');
     }
@@ -300,6 +300,6 @@ export class TramiteInternoComponent implements OnInit {
       cantidad: ''
     });
     document.getElementById('seleTwo')?.classList.add('invi')
-      document.getElementById('seleOne')?.classList.add('invi');
+    document.getElementById('seleOne')?.classList.add('invi');
   }
 }
