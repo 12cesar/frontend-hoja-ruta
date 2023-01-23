@@ -6,6 +6,7 @@ import { AuthRoutingModule } from './auth/auth.routing';
 
 import { NopagefoundComponent } from './nopagefound/nopagefound.component';
 import { SecretariaRoutingModule } from './secretaria/secretaria.routing';
+import { MesaPartesRoutingModule } from './mesapartes/mesa-partes.routing';
 
 
 
@@ -17,6 +18,7 @@ const routes: Routes=[
     RouterModule.forRoot(routes),
     AdminRoutingModule,
     SecretariaRoutingModule,
+    MesaPartesRoutingModule,
     AuthRoutingModule
   ],
   exports:[RouterModule]

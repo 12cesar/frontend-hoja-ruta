@@ -15,6 +15,8 @@ import { SecretariaModule } from './secretaria/secretaria.module';
 import { MatSelectModule } from '@angular/material/select';
 import { SecretariaGuard } from './guard/secretaria.guard';
 import { RouterModule } from '@angular/router';
+import { MesaPartesModule } from './mesapartes/mesa-partes.module';
+import { MpGuard } from './guard/mp.guard';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,7 @@ import { RouterModule } from '@angular/router';
     AppRoutingModule,
     AdminModule,
     SecretariaModule,
+    MesaPartesModule,
     AuthModule,
     BrowserAnimationsModule,
     RouterModule,
@@ -35,6 +38,7 @@ import { RouterModule } from '@angular/router';
   providers: [
     AdminGuard,
     SecretariaGuard,
+    MpGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorInterceptor,

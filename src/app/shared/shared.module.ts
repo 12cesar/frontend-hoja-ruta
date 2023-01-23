@@ -5,6 +5,7 @@ import { SidebarComponent } from './sidebar-admin/sidebar.component';
 import { HeaderComponent } from './header/header.component';
 import { SidebarSecreComponent } from './sidebar-secre/sidebar-secre.component';
 import { RouterModule } from '@angular/router';
+import { SidebarMpComponent } from './sidebar-mp/sidebar-mp.component';
 
 
 
@@ -13,13 +14,15 @@ import { RouterModule } from '@angular/router';
     BreadcrumbsComponent,
     SidebarComponent,
     HeaderComponent,
-    SidebarSecreComponent
+    SidebarSecreComponent,
+    SidebarMpComponent
   ],
   exports:[
     BreadcrumbsComponent,
     SidebarComponent,
     HeaderComponent,
-    SidebarSecreComponent
+    SidebarSecreComponent,
+    SidebarMpComponent
   ],
   imports: [
     CommonModule,
