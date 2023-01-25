@@ -6,6 +6,9 @@ import { HeaderComponent } from './header/header.component';
 import { SidebarSecreComponent } from './sidebar-secre/sidebar-secre.component';
 import { RouterModule } from '@angular/router';
 import { SidebarMpComponent } from './sidebar-mp/sidebar-mp.component';
+import { SearchComponent } from './search/search.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ToastrModule } from 'ngx-toastr';
 
 
 
@@ -15,18 +18,23 @@ import { SidebarMpComponent } from './sidebar-mp/sidebar-mp.component';
     SidebarComponent,
     HeaderComponent,
     SidebarSecreComponent,
-    SidebarMpComponent
+    SidebarMpComponent,
+    SearchComponent
   ],
   exports:[
     BreadcrumbsComponent,
     SidebarComponent,
     HeaderComponent,
     SidebarSecreComponent,
-    SidebarMpComponent
+    SidebarMpComponent,
+    SearchComponent
   ],
   imports: [
     CommonModule,
     RouterModule,
+    ReactiveFormsModule,
+    FormsModule,
+    ToastrModule
   ]
 })
 export class SharedModule { }

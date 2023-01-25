@@ -11,8 +11,8 @@ export class TramiteInternoService {
   url = `${apiHojaRuta}/tramite-interno`;
   constructor(private http: HttpClient, private router:Router) { }
 
-  getTramiteInternos():Observable<any>{
-    return this.http.get(this.url);
+  getTramiteInternos(buscar:string):Observable<any>{
+    return this.http.get(this.url,{params:{buscar}});
   }
   getTramiteInterno(codigo:string):Observable<any>{
     return this.http.get(`${this.url}/${codigo}`)

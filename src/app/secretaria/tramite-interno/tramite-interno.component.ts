@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 import { RutaInternaService } from 'src/app/services/ruta-interna.service';
 import { EnvioTramiteInterno } from 'src/app/interface/envio-tramite-interno';
 import { ResultRutaInterna } from 'src/app/interface/ruta.interna';
+import { closeAlert, loadData } from 'src/app/alerts/loadData';
 
 export interface DropList {
   item_id: number,
@@ -32,12 +33,14 @@ export class TramiteInternoComponent implements OnInit {
   tramiteForm: FormGroup;
   rutaForm: FormGroup;
   ids?: string;
+  busca:string=''
   dropdownSettingsUni: IDropdownSettings = {};
   dropdownSettings: IDropdownSettings = {};
 
   dropdownList = [{}];
   dropDownListUni = [{}];
   codigo: string = '';
+  p: number = 1;
   // Select Multiple
   // Fin select multiple
   constructor(
@@ -88,7 +91,7 @@ export class TramiteInternoComponent implements OnInit {
     }
   }
   mostrarTramite() {
-    this.tramiteInterService.getTramiteInternos().subscribe(
+    this.tramiteInterService.getTramiteInternos(this.busca).subscribe(
       (data: ResultTramiteInternos) => {
         this.listTramiteInterno = data.tramiteInterno;
       },
@@ -283,6 +286,26 @@ export class TramiteInternoComponent implements OnInit {
       )
     } else {
       console.log('hi');
+
+    }
+  }
+  buscar(valor:any){
+    console.log(valor);
+
+    this.busca = valor;
+    if (this.busca.length>=1) {
+      this.tramiteInterService.getTramiteInternos(valor).subscribe(
+        (data: ResultTramiteInternos) => {
+          this.listTramiteInterno = data.tramiteInterno;
+          console.log(data);
+        },
+        (error) => {
+          console.log(error);
+        }
+      )
+    }else{
+      this.busca = '';
+      this.mostrarTramite();
 
     }
   }

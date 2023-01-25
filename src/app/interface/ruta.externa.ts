@@ -26,6 +26,8 @@ export interface RutaExterna {
 export interface TramiteExterno {
     codigo_documento: string;
     proveido:         number;
+    dni:              string;
+    ciudadano:        string;
     asunto:           string;
     observacion:      null;
     registrado:       string;

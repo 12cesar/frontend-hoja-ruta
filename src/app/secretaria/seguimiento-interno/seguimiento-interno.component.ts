@@ -16,11 +16,13 @@ export class SeguimientoInternoComponent implements OnInit {
   listTramite?:RutaInterna[];
   listSeguimiento?:SeguimientoInterno[];
   formSeguimiento:FormGroup;
+  busca:string='';
+  p: number = 1;
   constructor(
     private rutaInterna:RutaInternaService,
     private seguimientoInterno:SeguimientoInternoService,
     private fb:FormBuilder
-  ) { 
+  ) {
     this.formSeguimiento= this.fb.group({
       codigo_tramite:{value:'',disabled:true},
       asunto:{value:'',disabled:true},
@@ -30,19 +32,19 @@ export class SeguimientoInternoComponent implements OnInit {
       folio:{value:'',disabled:true}
     })
   }
-  
+
   ngOnInit(): void {
     this.mostrarTramite()
   }
   mostrarTramite(){
-    this.rutaInterna.getTramiteDerivado().subscribe(
+    this.rutaInterna.getTramiteDerivado(this.busca).subscribe(
       (data:ResultRutaInternas)=>{
         this.listTramite = data.rutaInterna;
-        
+
       },
       (error)=>{
         console.log(error);
-        
+
       }
     )
   }
@@ -67,14 +69,32 @@ export class SeguimientoInternoComponent implements OnInit {
     this.seguimientoInterno.getSeguimiento(codigo_tramite).subscribe(
       (data:ResultSeguimientos)=>{
         this.listSeguimiento = data.seguimiento;
-        console.log(this.listSeguimiento);
-        
       },
       (error)=>{
         console.log(error);
-        
+
       }
     )
+  }
+  buscar(valor:any){
+    console.log(valor);
+
+    this.busca = valor;
+    if (this.busca.length>=1) {
+      this.rutaInterna.getTramiteDerivado(valor).subscribe(
+        (data:ResultRutaInternas)=>{
+          this.listTramite = data.rutaInterna;
+        },
+        (error)=>{
+          console.log(error);
+
+        }
+      )
+    }else{
+      this.busca = '';
+      this.mostrarTramite();
+
+    }
   }
   cancelar(){
     this.formSeguimiento.setValue({

@@ -2,16 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { ToastrService } from 'ngx-toastr';
+import { loadData } from 'src/app/alerts/loadData';
 import { Area, ResultAreas } from 'src/app/interface/area';
 import { EnvioTramiteExterno } from 'src/app/interface/envio-tramite-interno';
 import { Prioridad, ResultPrioridades } from 'src/app/interface/prioridad';
 import { ResultRutaExterna } from 'src/app/interface/ruta.externa';
-import { ResultTramiteExternos, TramiteExterno } from 'src/app/interface/tramite.externo';
+import { ResultTramiteExterno, ResultTramiteExternos, TramiteExterno } from 'src/app/interface/tramite.externo';
 import { AreaService } from 'src/app/services/area.service';
 import { PrioridadService } from 'src/app/services/prioridad.service';
 import { RutaExternaService } from 'src/app/services/ruta-externa.service';
 import { TramiteExternoService } from 'src/app/services/tramite-externo.service';
+import { ValidarSunatService } from 'src/app/services/validar-sunat.service';
 import Swal from 'sweetalert2';
+import { closeAlert } from '../../alerts/loadData';
+import { ResultValidarSunat } from 'src/app/interface/validar.sunat';
 
 @Component({
   selector: 'app-tramite-externo',
@@ -28,18 +32,24 @@ export class TramiteExternoComponent implements OnInit {
   ids?: string;
   dropdownSettingsUni:IDropdownSettings = {};
   dropdownSettings:IDropdownSettings = {};
-
+  busca:string='';
   dropdownList =[{}];
   dropDownListUni=[{}];
   codigo:string='';
+  validar={
+    dni:'',
+    ciudadano:''
+  };
+  p: number = 1;
   constructor(
     private fb: FormBuilder,
     private tramiteExterService: TramiteExternoService,
     private prioridadService: PrioridadService,
     private areaService: AreaService,
     private rutaService:RutaExternaService,
+    private validarSunat:ValidarSunatService,
     private toastr:ToastrService
-  ) { 
+  ) {
     this.tramiteForm = this.fb.group({
       proveido:[Number,Validators.required],
       asunto: ['', Validators.required],
@@ -79,9 +89,42 @@ export class TramiteExternoComponent implements OnInit {
       closeDropDownOnSelection: false
     }
   }
+  validarDni(){
+
+    const dni = this.validar.dni;
+    console.log(Number(dni));
+
+    if (Number(dni) && dni.length===8) {
+      loadData('Validando Datos','Porfavor Espere .....')
+      const formData = new FormData();
+      formData.append('dni',dni);
+      this.validarSunat.postValidarSunat(formData).subscribe(
+        (data:ResultValidarSunat)=>{
+
+          this.validar.ciudadano = `${data.datos.nombre} ${data.datos.apellido}`;
+          closeAlert();
+        },(error)=>{
+          console.log(error);
+
+        }
+      )
+
+    }else{
+
+      Swal.fire({
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Ingrese un dni valido',
+        showConfirmButton: false,
+        timer: 1500
+      })
+    }
+  }
   mostrarTramite() {
-    this.tramiteExterService.getTramiteExternos().subscribe(
+    this.tramiteExterService.getTramiteExternos(this.busca).subscribe(
       (data: ResultTramiteExternos) => {
+        console.log(data);
+
         this.listTramiteExterno = data.tramiteExterno;
       },
       (error) => {
@@ -180,7 +223,7 @@ export class TramiteExternoComponent implements OnInit {
             showConfirmButton: false,
             timer: 1500
           })
-        } 
+        }
       )
 
     }else{
@@ -252,6 +295,8 @@ export class TramiteExternoComponent implements OnInit {
       formData.append('observacion', this.tramiteForm.get('observacion')?.value);
       formData.append('folio', this.tramiteForm.get('folio')?.value);
       formData.append('id_prioridad', this.tramiteForm.get('prioridad')?.value);
+      formData.append('dni',this.validar.dni);
+      formData.append('ciudadano',this.validar.ciudadano);
       this.tramiteExterService.postTramiteExterno(formData).subscribe(
         (data) => {
           this.tramiteForm.setValue({
@@ -277,6 +322,24 @@ export class TramiteExternoComponent implements OnInit {
       )
     } else {
       console.log('hi');
+
+    }
+  }
+  buscar(valor:any){
+
+    this.busca = valor;
+    if (this.busca.length>=1) {
+      this.tramiteExterService.getTramiteExternos(valor).subscribe(
+        (data:ResultTramiteExternos)=>{
+          this.listTramiteExterno = data.tramiteExterno;
+        },(error)=>{
+          console.log(error);
+
+        }
+      )
+    }else{
+      this.busca = '';
+      this.mostrarTramite();
 
     }
   }

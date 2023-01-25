@@ -12,8 +12,8 @@ export class TramiteExternoService {
   url = `${apiHojaRuta}/tramite-externo`;
   constructor(private http: HttpClient, private router:Router) { }
 
-  getTramiteExternos():Observable<any>{
-    return this.http.get(this.url);
+  getTramiteExternos(buscar:string):Observable<any>{
+    return this.http.get(this.url,{params:{buscar}});
   }
   getTramiteExterno(codigo:string):Observable<any>{
     return this.http.get(`${this.url}/${codigo}`)

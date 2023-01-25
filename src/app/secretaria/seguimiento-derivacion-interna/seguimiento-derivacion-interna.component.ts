@@ -75,7 +75,6 @@ export class SeguimientoDerivacionInternaComponent implements OnInit {
     this.derivacionService.getDerivaciones().subscribe(
       (data:ResultDerivacionInternas)=>{
         this.listDerivacion = data.derivacion;
-        console.log(this.listDerivacion);
 
       },
       (error)=>{
@@ -87,7 +86,6 @@ export class SeguimientoDerivacionInternaComponent implements OnInit {
   mostrarAccion(){
     this.accionService.getAcciones('1').subscribe(
       (data:ResultAcciones)=>{
-        console.log(data);
         this.listAcciones = data.acciones;
       },
       (error)=>{
@@ -99,7 +97,6 @@ export class SeguimientoDerivacionInternaComponent implements OnInit {
   mostrarRespuesta(){
     this.respuestaService.getRespuesta('1').subscribe(
       (data:ResultRespuestas)=>{
-        console.log(data);
         this.listRespuesta = data.respuesta;
       },
       (error)=>{
@@ -111,7 +108,6 @@ export class SeguimientoDerivacionInternaComponent implements OnInit {
   mostrarArea(){
     this.areaService.getAreasSin().subscribe(
       (data:ResultAreas)=>{
-        console.log(data);
         this.listArea = data.area;
       },
       (error)=>{

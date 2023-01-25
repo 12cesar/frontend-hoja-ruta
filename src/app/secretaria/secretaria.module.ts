@@ -19,6 +19,7 @@ import { SeguimientoDerivacionInternaComponent } from './seguimiento-derivacion-
 import { SeguimientoDerivacionExternaComponent } from './seguimiento-derivacion-externa/seguimiento-derivacion-externa.component';
 import { TramiteGlobalInternoComponent } from './tramite-global-interno/tramite-global-interno.component';
 import { TramiteGlobalExternoComponent } from './tramite-global-externo/tramite-global-externo.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { TramiteGlobalExternoComponent } from './tramite-global-externo/tramite-
     SharedModule,
     RouterModule,
     ReactiveFormsModule,
+    NgxPaginationModule,
     FormsModule,
     MaterialModule,
     NgMultiSelectDropDownModule.forRoot(),

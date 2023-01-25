@@ -13,6 +13,8 @@ export interface ResultTramiteExterno {
 
 export interface TramiteExterno {
     codigo_documento: string;
+    ciudadano:        string;
+    dni:              string;
     asunto:           string;
     proveido:         number;
     observacion:      null;

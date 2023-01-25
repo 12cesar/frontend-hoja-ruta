@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { loadData } from 'src/app/alerts/loadData';
 import { ResultRutaExternas, RutaExterna } from 'src/app/interface/ruta.externa';
 import { ResultSeguimientoExternos, SeguimientoExterno } from 'src/app/interface/seguimiento.externo';
 import { RutaExternaService } from 'src/app/services/ruta-externa.service';
 import { SerguimientoExternoService } from 'src/app/services/serguimiento-externo.service';
+import { closeAlert } from '../../alerts/loadData';
 
 @Component({
   selector: 'app-seguimiento-externo',
@@ -15,11 +17,14 @@ export class SeguimientoExternoComponent implements OnInit {
   listTramite?:RutaExterna[];
   listSeguimiento?:SeguimientoExterno[];
   formSeguimiento:FormGroup;
+  busca:string='';
+  p: number = 1;
+  filterPost='';
   constructor(
     private rutaExterna:RutaExternaService,
     private seguimientoExterno:SerguimientoExternoService,
     private fb:FormBuilder
-  ) { 
+  ) {
     this.formSeguimiento= this.fb.group({
       codigo_tramite:{value:'',disabled:true},
       proveido:{value:'',disabled:true},
@@ -35,14 +40,13 @@ export class SeguimientoExternoComponent implements OnInit {
     this.mostrarTramite()
   }
   mostrarTramite(){
-    this.rutaExterna.getTramiteDerivado().subscribe(
+    this.rutaExterna.getTramiteDerivado(this.busca).subscribe(
       (data:ResultRutaExternas)=>{
         this.listTramite = data.rutaExterna;
-        
       },
       (error)=>{
         console.log(error);
-        
+
       }
     )
   }
@@ -67,17 +71,36 @@ export class SeguimientoExternoComponent implements OnInit {
     });
     this.seguimientoExterno.getSeguimiento(codigo_tramite).subscribe(
       (data:ResultSeguimientoExternos)=>{
-        console.log(data);
-        
         this.listSeguimiento = data.seguimiento;
-        console.log(this.listSeguimiento);
-        
+
       },
       (error)=>{
         console.log(error);
-        
+
       }
     )
+  }
+  buscar(valor:any){
+    console.log(valor);
+
+    this.busca = valor;
+    if (this.busca.length>=1) {
+      loadData('Cargando Datos','Porfavor Espere .....');
+      this.rutaExterna.getTramiteDerivado(valor).subscribe(
+        (data:ResultRutaExternas)=>{
+          this.listTramite = data.rutaExterna;
+          closeAlert();
+        },
+        (error)=>{
+          console.log(error);
+
+        }
+      )
+    }else{
+      this.busca = '';
+      this.mostrarTramite();
+
+    }
   }
   cancelar(){
     this.formSeguimiento.setValue({

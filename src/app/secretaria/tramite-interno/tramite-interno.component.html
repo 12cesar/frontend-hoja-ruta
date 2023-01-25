@@ -1,6 +1,9 @@
 <h4 class="card-title">Muted Table</h4>
 <h6 class="card-subtitle">Add class <code>.color-table .muted-table</code></h6>
 <div class="row justify-content-end mb-5">
+  <div class="col-lg-4">
+    <app-search (search)="buscar($event)"></app-search>
+  </div>
     <div class="col-lg-2">
         <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modalTramite"><i
                 class="fa fa-plus-square"></i> Crear Tramite</button>
@@ -20,7 +23,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let tramite of listTramiteInterno">
+            <tr *ngFor="let tramite of listTramiteInterno! | paginate: { itemsPerPage: 5, currentPage: p }">
                 <td>{{tramite.codigo_documento}}</td>
                 <td>{{tramite.asunto}}</td>
                 <td>{{tramite.observacion}}</td>
@@ -31,16 +34,17 @@
                     <a class="btn btn-circle btn-success ml-2" (click)="agregarCodigo(tramite.codigo_documento)"
                         data-toggle="modal" data-target="#modalRuta" data-whatever="@mdo"> <i
                             class="fa fa-road"></i></a>
-                    <a href="http://192.168.100.51:4000/api/pdfcreator?codigo={{tramite.codigo_documento}}" class="btn btn-circle btn-info ml-2" target="_blank" > 
+                    <a href="http://192.168.100.51:4000/api/pdfcreator?codigo={{tramite.codigo_documento}}" class="btn btn-circle btn-info ml-2" target="_blank" >
                         <i class="fa fa-file-pdf-o"></i> </a>
                     <a class="btn btn-circle btn-warning ml-2" data-toggle="modal" data-target="#modal"
                         data-whatever="@mdo"> <i class="fa fa-pencil"></i> </a>
-                    
+
                 </td>
             </tr>
 
         </tbody>
     </table>
+    <pagination-controls class="text-right mt-3" (pageChange)="p = $event"></pagination-controls>
 </div>
 
 <div class="modal fade" id="modalTramite" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"

@@ -43,7 +43,6 @@ export class DerivacionInternoComponent implements OnInit {
     this.rutaInternaService.getRutaInternas().subscribe(
       (data: ResultRutaInternas) => {
         this.listRuta = data.rutaInterna;
-        console.log(this.listRuta);
       },
       (error) => {
         console.log(error);
@@ -57,7 +56,7 @@ export class DerivacionInternoComponent implements OnInit {
       },
       (error)=>{
         console.log(error);
-        
+
       }
     )
   }
@@ -66,8 +65,7 @@ export class DerivacionInternoComponent implements OnInit {
       codigo,
       destino
     }
-    console.log(this.rutaForm);
-    
+
   }
   derivar(){
     const formData = new FormData();
@@ -90,7 +88,7 @@ export class DerivacionInternoComponent implements OnInit {
             showConfirmButton: false,
             timer: 1500
           })
-      
+
         },
         (error)=>{
           console.log(error);

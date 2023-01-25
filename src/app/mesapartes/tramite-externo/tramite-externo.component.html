@@ -1,144 +1,167 @@
 <h4 class="card-title">Muted Table</h4>
 <h6 class="card-subtitle">Add class <code>.color-table .muted-table</code></h6>
 <div class="row justify-content-end mb-5">
-    <div class="col-lg-2">
-        <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modalTramite"><i
-                class="fa fa-plus-square"></i> Crear Tramite</button>
-    </div>
+  <div class="col-lg-4">
+    <app-search (search)="buscar($event)"></app-search>
+  </div>
+  <div class="col-lg-2">
+    <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modalTramite"><i
+        class="fa fa-plus-square"></i> Crear Tramite</button>
+  </div>
 </div>
 <div class="table-responsive">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Tramite Interno</th>
-                <th>Proveido</th>
-                <th>Asunto</th>
-                <th>Observacion</th>
-                <th>Registrado</th>
-                <th>Folio</th>
-                <th>Fecha</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let tramite of listTramiteExterno">
-                <td>{{tramite.codigo_documento}}</td>
-                <td>{{tramite.proveido}}</td>
-                <td>{{tramite.asunto}}</td>
-                <td>{{tramite.observacion}}</td>
-                <td>{{tramite.registrado}}</td>
-                <td>{{tramite.folio}}</td>
-                <td>{{tramite.fecha}} - {{tramite.hora}}</td>
-                <td class="text-nowrap">
-                    <a class="btn btn-circle btn-success ml-2" (click)="agregarCodigo(tramite.codigo_documento)"
-                        data-toggle="modal" data-target="#modalRuta" data-whatever="@mdo"> <i
-                            class="fa fa-road"></i></a>
-                    <a href="http://192.168.100.51:4000/api/pdfcreator?codigo={{tramite.codigo_documento}}" class="btn btn-circle btn-info ml-2" target="_blank" > 
-                        <i class="fa fa-file-pdf-o"></i> </a>
-                    <a class="btn btn-circle btn-warning ml-2" data-toggle="modal" data-target="#modal"
-                        data-whatever="@mdo"> <i class="fa fa-pencil"></i> </a>
-                    
-                </td>
-            </tr>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Tramite Interno</th>
+        <th>Proveido</th>
+        <th>DNI</th>
+        <th>Ciudadano</th>
+        <th>Asunto</th>
+        <th>Observacion</th>
+        <th>Registrado</th>
+        <th>Folio</th>
+        <th>Fecha</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let tramite of listTramiteExterno! | paginate: { itemsPerPage: 5, currentPage: p }">
+        <td>{{tramite.codigo_documento}}</td>
+        <td>{{tramite.proveido}}</td>
+        <td>{{tramite.dni}}</td>
+        <td>{{tramite.ciudadano}}</td>
+        <td>{{tramite.asunto}}</td>
+        <td>{{tramite.observacion}}</td>
+        <td>{{tramite.registrado}}</td>
+        <td>{{tramite.folio}}</td>
+        <td>{{tramite.fecha}} - {{tramite.hora}}</td>
+        <td class="text-nowrap">
+          <a class="btn btn-circle btn-success ml-2" (click)="agregarCodigo(tramite.codigo_documento)"
+            data-toggle="modal" data-target="#modalRuta" data-whatever="@mdo"> <i class="fa fa-road"></i></a>
+          <a href="http://localhost:4000/api/pdfcreator?codigo={{tramite.codigo_documento}}"
+            class="btn btn-circle btn-info ml-2" target="_blank">
+            <i class="fa fa-file-pdf-o"></i> </a>
+          <a class="btn btn-circle btn-warning ml-2" data-toggle="modal" data-target="#modal" data-whatever="@mdo"> <i
+              class="fa fa-pencil"></i> </a>
 
-        </tbody>
-    </table>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+  <pagination-controls class="text-right mt-3" (pageChange)="p = $event"></pagination-controls>
 </div>
 
 <div class="modal fade" id="modalTramite" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-    data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Generar Tramite</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelar()">
-                    <span aria-hidden="true">&times;</span>
+  data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Generar Tramite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelar()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="control-label">Ingresar Ciudadano</label>
+          <div class="row">
+            <div class="col-lg-5">
+              <div class="form-inline">
+                <input class="form-control" type="text" placeholder="Ingresar DNI" aria-label="Search" [(ngModel)]="validar.dni">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="button" (click)="validarDni()">
+                  <i class="fa fa-search"></i>
                 </button>
+              </div>
             </div>
-            <div class="modal-body">
-                <form [formGroup]="tramiteForm" (ngSubmit)="crearRditarTramite()">
-                    <div class="form-group">
-                        <label class="control-label">Proveido</label>
-                        <input type="number" id="firstName" class="form-control" placeholder="Ingrese su asunto"
-                            formControlName="proveido">
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Asunto</label>
-                        <input type="text" id="firstName" class="form-control" placeholder="Ingrese su asunto"
-                            formControlName="asunto">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlTextarea1">Observacion</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
-                            formControlName="observacion"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Folios</label>
-                        <input type="number" id="firstName" class="form-control" placeholder="Ingrese su asunto"
-                            formControlName="folio">
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">Category</label>
-                        <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1"
-                            formControlName="prioridad">
-                            <option value="">Seleccione una opcion</option>
-                            <option *ngFor="let prioridad of listPrioridad" value={{prioridad.id}}>{{prioridad.nombre}}
-                            </option>
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                            (click)="cancelar()">Cerrar</button>
-                        <button type="submit" class="btn btn-primary" [disabled]="tramiteForm.invalid">Crear
-                            Tramite</button>
-                    </div>
-                </form>
+            <div class="col-lg-7">
+              <input type="text" id="firstName" class="form-control" placeholder="Ingrese ciudadano"
+              [(ngModel)]="validar.ciudadano" disabled>
             </div>
+          </div>
         </div>
+        <form [formGroup]="tramiteForm" (ngSubmit)="crearRditarTramite()">
+          <div class="form-group">
+            <label class="control-label">Proveido</label>
+            <input type="number" id="firstName" class="form-control" placeholder="Ingrese su asunto"
+              formControlName="proveido">
+          </div>
+          <div class="form-group">
+            <label class="control-label">Asunto</label>
+            <input type="text" id="firstName" class="form-control" placeholder="Ingrese su asunto"
+              formControlName="asunto">
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">Observacion</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+              formControlName="observacion"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Folios</label>
+            <input type="number" id="firstName" class="form-control" placeholder="Ingrese su asunto"
+              formControlName="folio">
+          </div>
+          <div class="form-group">
+            <label class="control-label">Category</label>
+            <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1"
+              formControlName="prioridad">
+              <option value="">Seleccione una opcion</option>
+              <option *ngFor="let prioridad of listPrioridad" value={{prioridad.id}}>{{prioridad.nombre}}
+              </option>
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelar()">Cerrar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="tramiteForm.invalid">Crear
+              Tramite</button>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
 
 <div class="modal fade" id="modalRuta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-    data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Generar Tramite</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelar()">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form [formGroup]="rutaForm" (ngSubmit)="crearRuta()">
-                    <div class="form-group">
-                        <label class="control-label">Seleccionar Tipo de Envio</label>
-                        <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1"
-                            formControlName="cantidad" (click)="verTipoRuta($event)">
-                            <option value="">Seleccionar Tipo de Envio</option>
-                            <option value="1">Unidad</option>
-                            <option value="2">Multiples</option>
-                        </select>
-                    </div>
+  data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Generar Tramite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelar()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="rutaForm" (ngSubmit)="crearRuta()">
+          <div class="form-group">
+            <label class="control-label">Seleccionar Tipo de Envio</label>
+            <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1"
+              formControlName="cantidad" (click)="verTipoRuta($event)">
+              <option value="">Seleccionar Tipo de Envio</option>
+              <option value="1">Unidad</option>
+              <option value="2">Multiples</option>
+            </select>
+          </div>
 
-                    <div class="form-group invi" id="seleTwo">
-                        <label class="control-label">Seleccionar Area</label>
-                        <ng-multiselect-dropdown [placeholder]="'Seleccionar el destino'" name="city" [data]="listArea"
-                            [settings]="dropdownSettingsUni" formControlName="destinoUno" [disabled]="false">
-                        </ng-multiselect-dropdown>
-                    </div>
-                    <div class="form-group invi" id="seleOne">
-                        <label class="control-label">Seleccionar Areas</label>
-                        <ng-multiselect-dropdown [placeholder]="'Seleccionar los destinos'"
-                            [settings]="dropdownSettings" [data]="listArea" formControlName="destinoDos">
-                        </ng-multiselect-dropdown>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                            (click)="cancelar()">Cerrar</button>
-                        <button type="submit" class="btn btn-primary" [disabled]="rutaForm.invalid">Crear Ruta</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+          <div class="form-group invi" id="seleTwo">
+            <label class="control-label">Seleccionar Area</label>
+            <ng-multiselect-dropdown [placeholder]="'Seleccionar el destino'" name="city" [data]="listArea"
+              [settings]="dropdownSettingsUni" formControlName="destinoUno" [disabled]="false">
+            </ng-multiselect-dropdown>
+          </div>
+          <div class="form-group invi" id="seleOne">
+            <label class="control-label">Seleccionar Areas</label>
+            <ng-multiselect-dropdown [placeholder]="'Seleccionar los destinos'" [settings]="dropdownSettings"
+              [data]="listArea" formControlName="destinoDos">
+            </ng-multiselect-dropdown>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancelar()">Cerrar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="rutaForm.invalid">Crear Ruta</button>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
 </div>

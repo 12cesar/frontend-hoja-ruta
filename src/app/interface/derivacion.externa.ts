@@ -24,6 +24,8 @@ export interface DerivacionExterna {
 
 export interface TramiteExterno {
     codigo_documento: string;
+    dni:              string;
+    ciudadano:        string;
     asunto:           string;
     proveido:         number;
     observacion:      null;

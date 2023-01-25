@@ -1,5 +1,10 @@
 <h4 class="card-title">Muted Table</h4>
 <h6 class="card-subtitle">Add class <code>.color-table .muted-table</code></h6>
+<div class="row justify-content-end mb-5">
+  <div class="col-lg-4">
+    <app-search (search)="buscar($event)"></app-search>
+  </div>
+</div>
 <div class="table-responsive">
   <table class="table">
     <thead>
@@ -14,7 +19,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let ruta of listTramite">
+      <tr *ngFor="let ruta of listTramite! | paginate: { itemsPerPage: 5, currentPage: p }">
         <td>{{ ruta.codigo_tramite }}</td>
         <td>{{ ruta.TramiteInterno.asunto }}</td>
         <td>{{ ruta.TramiteInterno.observacion }}</td>
@@ -42,6 +47,7 @@
       </tr>
     </tbody>
   </table>
+  <pagination-controls class="text-right mt-3" (pageChange)="p = $event"></pagination-controls>
 </div>
 
 <div class="modal fade" id="seguimientoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"

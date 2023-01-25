@@ -38,7 +38,7 @@ export class SeguimientoDerivacionExternaComponent implements OnInit {
     private respuestaService:RespuestaService,
     private areaService:AreaService,
     private fb:FormBuilder
-  ) { 
+  ) {
     this.formSeguimiento= this.fb.group({
       codigo_tramite:{value:'',disabled:true},
       proveido:{value:'',disabled:true},
@@ -75,7 +75,6 @@ export class SeguimientoDerivacionExternaComponent implements OnInit {
     this.derivacionService.getDerivaciones().subscribe(
       (data:ResultDerivacionExternas)=>{
         this.listDerivacion = data.derivacion;
-        console.log(this.listDerivacion);
 
       },
       (error)=>{
@@ -87,7 +86,6 @@ export class SeguimientoDerivacionExternaComponent implements OnInit {
   mostrarAccion(){
     this.accionService.getAcciones('1').subscribe(
       (data:ResultAcciones)=>{
-        console.log(data);
         this.listAcciones = data.acciones;
       },
       (error)=>{
@@ -99,7 +97,6 @@ export class SeguimientoDerivacionExternaComponent implements OnInit {
   mostrarRespuesta(){
     this.respuestaService.getRespuesta('1').subscribe(
       (data:ResultRespuestas)=>{
-        console.log(data);
         this.listRespuesta = data.respuesta;
       },
       (error)=>{
@@ -111,7 +108,6 @@ export class SeguimientoDerivacionExternaComponent implements OnInit {
   mostrarArea(){
     this.areaService.getAreasSin().subscribe(
       (data:ResultAreas)=>{
-        console.log(data);
         this.listArea = data.area;
       },
       (error)=>{

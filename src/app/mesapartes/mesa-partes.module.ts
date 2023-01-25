@@ -18,7 +18,7 @@ import { MaterialModule } from '../material/material.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { MatSelectModule } from '@angular/material/select';
 import { ToastrModule } from 'ngx-toastr';
-
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 @NgModule({
@@ -51,6 +51,7 @@ import { ToastrModule } from 'ngx-toastr';
     ReactiveFormsModule,
     FormsModule,
     MaterialModule,
+    NgxPaginationModule,
     NgMultiSelectDropDownModule.forRoot(),
     MatSelectModule,
     ToastrModule.forRoot(),
