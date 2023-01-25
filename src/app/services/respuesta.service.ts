@@ -19,4 +19,10 @@ export class RespuestaService {
   putRespuestaInternoSinDerivado(formData:FormData):Observable<any>{
     return this.http.put(`${this.url}/interno/sin-derivado`,formData);
   }
+  putRespuestaExternoDerivado(formData:FormData):Observable<any>{
+    return this.http.put(`${this.url}/externo/derivado`,formData)
+  }
+  putRespuestaExternoSinDerivado(formData:FormData):Observable<any>{
+    return this.http.put(`${this.url}/externo/sin-derivado`,formData);
+  }
 }
