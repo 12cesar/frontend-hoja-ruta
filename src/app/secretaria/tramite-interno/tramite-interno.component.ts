@@ -4,6 +4,7 @@ import { Area, ResultAreas } from 'src/app/interface/area';
 import { Prioridad, ResultPrioridades } from 'src/app/interface/prioridad';
 import {
   ResultTramiteInternos,
+  ResultTramiteInterno,
   TramiteInterno,
 } from 'src/app/interface/tramite.interno';
 import { AreaService } from 'src/app/services/area.service';
@@ -16,6 +17,7 @@ import { RutaInternaService } from 'src/app/services/ruta-interna.service';
 import { EnvioTramiteInterno } from 'src/app/interface/envio-tramite-interno';
 import { ResultRutaInterna } from 'src/app/interface/ruta.interna';
 import { closeAlert, loadData } from 'src/app/alerts/loadData';
+import { apiHojaRuta } from 'src/app/api/apiHojaRuta';
 
 export interface DropList {
   item_id: number,
@@ -36,11 +38,12 @@ export class TramiteInternoComponent implements OnInit {
   busca:string=''
   dropdownSettingsUni: IDropdownSettings = {};
   dropdownSettings: IDropdownSettings = {};
-
+  api=`${apiHojaRuta}/pdfcreator`;
   dropdownList = [{}];
   dropDownListUni = [{}];
   codigo: string = '';
   p: number = 1;
+  title='Actualizar Tramite';
   // Select Multiple
   // Fin select multiple
   constructor(
@@ -241,6 +244,26 @@ export class TramiteInternoComponent implements OnInit {
     )
 
   }
+  obtenerDatos(cod:string){
+    this.title='Actualizar Tramite';
+    this.ids = cod;
+    this.tramiteInterService.getTramiteInterno(this.ids).subscribe(
+      (data:ResultTramiteInterno)=>{
+        console.log(data);
+        this.tramiteForm.setValue({
+          asunto: data.tramiteInterno.asunto,
+          observacion: data.tramiteInterno.observacion,
+          folio: data.tramiteInterno.folio,
+          prioridad: data.tramiteInterno.id_prioridad
+        });
+      },
+      (error)=>{
+        console.log(error);
+        
+      }
+    )
+    
+  }
   verTipoRuta(event: any) {
     if (event.target.value !== "" && event.target.value === "1") {
       document.getElementById('seleTwo')?.classList.remove('invi');
@@ -285,8 +308,27 @@ export class TramiteInternoComponent implements OnInit {
         }
       )
     } else {
-      console.log('hi');
+      const formData = new FormData();
+      formData.append('asunto', this.tramiteForm.get('asunto')?.value);
+      formData.append('observacion', this.tramiteForm.get('observacion')?.value);
+      formData.append('folio', this.tramiteForm.get('folio')?.value);
+      formData.append('id_prioridad', this.tramiteForm.get('prioridad')?.value);
+      this.tramiteInterService.putTramiteInterno(formData,this.ids).subscribe(
+        (data) => {
+          this.mostrarTramite();
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: data.msg,
+            showConfirmButton: false,
+            timer: 1500
+          })
+        },
+        (error) => {
+          console.log(error);
 
+        }
+      )
     }
   }
   buscar(valor:any){
@@ -310,6 +352,7 @@ export class TramiteInternoComponent implements OnInit {
     }
   }
   cancelar() {
+    this.title='Crear Tramite';
     this.ids = undefined
     this.tramiteForm.setValue({
       asunto: '',

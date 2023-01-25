@@ -20,4 +20,7 @@ export class TramiteInternoService {
   postTramiteInterno(data:FormData):Observable<any>{
     return this.http.post(this.url, data);
   }
+  putTramiteInterno(data:FormData, codigo:string):Observable<any>{
+    return this.http.put(`${this.url}/${codigo}`, data);
+  }
 }

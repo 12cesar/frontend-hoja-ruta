@@ -1,3 +1,4 @@
+import { apiHojaRuta } from './../../api/apiHojaRuta';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
@@ -36,11 +37,13 @@ export class TramiteExternoComponent implements OnInit {
   dropdownList =[{}];
   dropDownListUni=[{}];
   codigo:string='';
+  api=`${apiHojaRuta}/pdfcreator/externo`;
   validar={
     dni:'',
     ciudadano:''
   };
   p: number = 1;
+  title='Crear Tramite';
   constructor(
     private fb: FormBuilder,
     private tramiteExterService: TramiteExternoService,
@@ -287,6 +290,31 @@ export class TramiteExternoComponent implements OnInit {
       document.getElementById('seleOne')?.classList.add('invi');
     }
   }
+  obtenerDatos(cod:string){
+    this.ids = cod;
+    this.title= 'Actualizar Tramite';
+    this.tramiteExterService.getTramiteExterno(this.ids).subscribe(
+      (data:ResultTramiteExterno)=>{
+        console.log(data);
+        this.validar={
+          dni:data.tramiteExterno.dni,
+          ciudadano:data.tramiteExterno.ciudadano
+        };
+        this.tramiteForm.setValue({
+          proveido:data.tramiteExterno.proveido,
+          asunto: data.tramiteExterno.asunto,
+          observacion: data.tramiteExterno.observacion,
+          folio: data.tramiteExterno.folio,
+          prioridad: data.tramiteExterno.id_prioridad
+        });
+      },
+      (error)=>{
+        console.log(error);
+        
+      }
+    )
+    
+  }
   crearRditarTramite() {
     if (this.ids === undefined) {
       const formData = new FormData();
@@ -321,7 +349,30 @@ export class TramiteExternoComponent implements OnInit {
         }
       )
     } else {
-      console.log('hi');
+      const formData = new FormData();
+      formData.append('proveido', this.tramiteForm.get('proveido')?.value);
+      formData.append('asunto', this.tramiteForm.get('asunto')?.value);
+      formData.append('observacion', this.tramiteForm.get('observacion')?.value);
+      formData.append('folio', this.tramiteForm.get('folio')?.value);
+      formData.append('id_prioridad', this.tramiteForm.get('prioridad')?.value);
+      formData.append('dni',this.validar.dni);
+      formData.append('ciudadano',this.validar.ciudadano);
+      this.tramiteExterService.putTramiteExterno(formData, this.ids).subscribe(
+        (data) => {
+          this.mostrarTramite();
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: data.msg,
+            showConfirmButton: false,
+            timer: 1500
+          })
+        },
+        (error) => {
+          console.log(error);
+
+        }
+      )
 
     }
   }
@@ -344,7 +395,12 @@ export class TramiteExternoComponent implements OnInit {
     }
   }
   cancelar() {
+    this.validar={
+      ciudadano:'',
+      dni:''
+    }
     this.ids = undefined
+    this.title ='Crear Tramite'
     this.tramiteForm.setValue({
       asunto: '',
       proveido:Number,

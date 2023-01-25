@@ -16,9 +16,12 @@ export class TramiteExternoService {
     return this.http.get(this.url,{params:{buscar}});
   }
   getTramiteExterno(codigo:string):Observable<any>{
-    return this.http.get(`${this.url}/${codigo}`)
+    return this.http.get(`${this.url}/${codigo}`);
   }
   postTramiteExterno(data:FormData):Observable<any>{
     return this.http.post(this.url, data);
+  }
+  putTramiteExterno(data:FormData, codigo:string):Observable<any>{
+    return this.http.put(`${this.url}/${codigo}`, data);
   }
 }

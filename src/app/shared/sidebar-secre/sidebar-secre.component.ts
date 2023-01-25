@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LoginService } from 'src/app/services/login.service';
 import { SidebarSecreService } from '../../services/sidebar-secre.service';
 
 @Component({
@@ -9,11 +10,13 @@ import { SidebarSecreService } from '../../services/sidebar-secre.service';
 export class SidebarSecreComponent implements OnInit {
 
   menuItems?: any[];
-  constructor(private sidebarService: SidebarSecreService) {
+  constructor(private sidebarService: SidebarSecreService,private loginService:LoginService) {
     this.menuItems = this.sidebarService.menu
   }
 
   ngOnInit(): void {
   }
-
+  logout(){
+    this.loginService.loggoud();
+  }
 }
