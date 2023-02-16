@@ -14,9 +14,8 @@
     <thead>
       <tr>
         <th>Tramite Interno</th>
-        <th>Proveido</th>
-        <th>DNI</th>
-        <th>Ciudadano</th>
+        <th>Tipo Documento</th>
+        <th>Numero Documento</th>
         <th>Asunto</th>
         <th>Observacion</th>
         <th>Registrado</th>
@@ -28,9 +27,8 @@
     <tbody>
       <tr *ngFor="let tramite of listTramiteExterno! | paginate: { itemsPerPage: 5, currentPage: p }">
         <td>{{tramite.codigo_documento}}</td>
-        <td>{{tramite.proveido}}</td>
-        <td>{{tramite.dni}}</td>
-        <td>{{tramite.ciudadano}}</td>
+        <td>{{tramite.TipoDocumento.nombre}}</td>
+        <td>{{tramite.nom_documento}}</td>
         <td>{{tramite.asunto}}</td>
         <td>{{tramite.observacion}}</td>
         <td>{{tramite.registrado}}</td>
@@ -39,7 +37,7 @@
         <td class="text-nowrap">
           <a class="btn btn-circle btn-success ml-2" (click)="agregarCodigo(tramite.codigo_documento)"
             data-toggle="modal" data-target="#modalRuta" data-whatever="@mdo"> <i class="fa fa-road"></i></a>
-          <a href="{{api}}?codigo={{tramite.codigo_documento}}&proveido={{tramite.proveido}}"
+          <a href="{{api}}?codigo={{tramite.codigo_documento}}"
             class="btn btn-circle btn-info ml-2" target="_blank">
             <i class="fa fa-file-pdf-o"></i> </a>
           <a class="btn btn-circle btn-warning ml-2" (click)="obtenerDatos(tramite.codigo_documento)" data-toggle="modal" data-target="#modalTramite" data-whatever="@mdo"> <i
@@ -64,28 +62,25 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="form-group">
-          <label class="control-label">Ingresar Ciudadano</label>
-          <div class="row">
-            <div class="col-lg-5">
-              <div class="form-inline">
-                <input class="form-control" type="text" placeholder="Ingresar DNI" aria-label="Search" [(ngModel)]="validar.dni">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="button" (click)="validarDni()">
-                  <i class="fa fa-search"></i>
-                </button>
-              </div>
-            </div>
-            <div class="col-lg-7">
-              <input type="text" id="firstName" class="form-control" placeholder="Ingrese ciudadano"
-              [(ngModel)]="validar.ciudadano" disabled>
-            </div>
-          </div>
-        </div>
+        
         <form [formGroup]="tramiteForm" (ngSubmit)="crearRditarTramite()">
           <div class="form-group">
-            <label class="control-label">Proveido</label>
-            <input type="number" id="firstName" class="form-control" placeholder="Ingrese su asunto"
-              formControlName="proveido">
+            <label class="control-label">Tipo de Documento</label>
+            <div class="row">
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1"
+                    formControlName="tipo_documento">
+                    <option value="">Seleccione una opcion</option>
+                    <option *ngFor="let tipodoc of listTipoDoc" value={{tipodoc.id}}>{{tipodoc.nombre}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-lg-8">
+                <input type="text" id="firstName" class="form-control" placeholder="Ingrese el numero del documento" formControlName="nom_documento">
+              </div>
+            </div>
           </div>
           <div class="form-group">
             <label class="control-label">Asunto</label>

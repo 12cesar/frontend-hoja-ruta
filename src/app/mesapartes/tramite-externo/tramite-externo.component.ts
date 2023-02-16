@@ -17,6 +17,8 @@ import { ValidarSunatService } from 'src/app/services/validar-sunat.service';
 import Swal from 'sweetalert2';
 import { closeAlert } from '../../alerts/loadData';
 import { ResultValidarSunat } from 'src/app/interface/validar.sunat';
+import { TipoDocumentoService } from 'src/app/services/tipo-documento.service';
+import { ResultTipoDocumento, TipoDoc } from 'src/app/interface/tipo.documento';
 
 @Component({
   selector: 'app-tramite-externo',
@@ -25,9 +27,10 @@ import { ResultValidarSunat } from 'src/app/interface/validar.sunat';
 })
 export class TramiteExternoComponent implements OnInit {
 
-  listTramiteExterno?: TramiteExterno[];
+  listTramiteExterno: TramiteExterno[] = [];
   listPrioridad?: Prioridad[];
   listArea: Area[]=[];
+  listTipoDoc:TipoDoc[]=[];
   tramiteForm: FormGroup;
   rutaForm: FormGroup;
   ids?: string;
@@ -51,7 +54,8 @@ export class TramiteExternoComponent implements OnInit {
     private areaService: AreaService,
     private rutaService:RutaExternaService,
     private validarSunat:ValidarSunatService,
-    private toastr:ToastrService
+    private toastr:ToastrService,
+    private tipoDocumentoService:TipoDocumentoService
   ) {
     this.tramiteForm = this.fb.group({
       proveido:[Number,Validators.required],
@@ -59,6 +63,8 @@ export class TramiteExternoComponent implements OnInit {
       observacion: [''],
       folio: [Number, Validators.required],
       prioridad: ['', Validators.required],
+      tipo_documento:['',Validators.required],
+      nom_documento:['',Validators.required]
 
     });
     this.rutaForm = this.fb.group({
@@ -72,6 +78,7 @@ export class TramiteExternoComponent implements OnInit {
     this.mostrarTramite();
     this.mostrarPrioridad();
     this.mostrarAreas();
+    this.mostrarTipoDocumento();
 
     this.dropdownSettings = {
       singleSelection: false,
@@ -122,6 +129,18 @@ export class TramiteExternoComponent implements OnInit {
         timer: 1500
       })
     }
+  }
+  mostrarTipoDocumento(){
+    this.tipoDocumentoService.getTipoDocumento().subscribe(
+      (data:ResultTipoDocumento)=>{
+        console.log(data);
+        this.listTipoDoc = data.tipoDoc;
+      },
+      (error)=>{
+        console.log(error);
+        
+      }
+    )
   }
   mostrarTramite() {
     this.tramiteExterService.getTramiteExternos(this.busca).subscribe(
@@ -296,12 +315,7 @@ export class TramiteExternoComponent implements OnInit {
     this.tramiteExterService.getTramiteExterno(this.ids).subscribe(
       (data:ResultTramiteExterno)=>{
         console.log(data);
-        this.validar={
-          dni:data.tramiteExterno.dni,
-          ciudadano:data.tramiteExterno.ciudadano
-        };
         this.tramiteForm.setValue({
-          proveido:data.tramiteExterno.proveido,
           asunto: data.tramiteExterno.asunto,
           observacion: data.tramiteExterno.observacion,
           folio: data.tramiteExterno.folio,
@@ -323,8 +337,8 @@ export class TramiteExternoComponent implements OnInit {
       formData.append('observacion', this.tramiteForm.get('observacion')?.value);
       formData.append('folio', this.tramiteForm.get('folio')?.value);
       formData.append('id_prioridad', this.tramiteForm.get('prioridad')?.value);
-      formData.append('dni',this.validar.dni);
-      formData.append('ciudadano',this.validar.ciudadano);
+      formData.append('tipo_documento', this.tramiteForm.get('tipo_documento')?.value);
+      formData.append('nom_documento', this.tramiteForm.get('nom_documento')?.value);
       this.tramiteExterService.postTramiteExterno(formData).subscribe(
         (data) => {
           this.tramiteForm.setValue({
@@ -332,7 +346,9 @@ export class TramiteExternoComponent implements OnInit {
             proveido:Number,
             observacion: '',
             folio: Number,
-            prioridad: ''
+            prioridad: '',
+            tipo_documento:'',
+            nom_documento:''
           })
           this.mostrarTramite();
           Swal.fire({
@@ -355,8 +371,8 @@ export class TramiteExternoComponent implements OnInit {
       formData.append('observacion', this.tramiteForm.get('observacion')?.value);
       formData.append('folio', this.tramiteForm.get('folio')?.value);
       formData.append('id_prioridad', this.tramiteForm.get('prioridad')?.value);
-      formData.append('dni',this.validar.dni);
-      formData.append('ciudadano',this.validar.ciudadano);
+      formData.append('tipo_documento', this.tramiteForm.get('tipo_documento')?.value);
+      formData.append('nom_documento', this.tramiteForm.get('nom_documento')?.value);
       this.tramiteExterService.putTramiteExterno(formData, this.ids).subscribe(
         (data) => {
           this.mostrarTramite();
@@ -379,15 +395,10 @@ export class TramiteExternoComponent implements OnInit {
   buscar(valor:any){
 
     this.busca = valor;
+    console.log(this.busca);
+    
     if (this.busca.length>=1) {
-      this.tramiteExterService.getTramiteExternos(valor).subscribe(
-        (data:ResultTramiteExternos)=>{
-          this.listTramiteExterno = data.tramiteExterno;
-        },(error)=>{
-          console.log(error);
-
-        }
-      )
+      this.mostrarTramite();
     }else{
       this.busca = '';
       this.mostrarTramite();
@@ -406,7 +417,9 @@ export class TramiteExternoComponent implements OnInit {
       proveido:Number,
       observacion: '',
       folio: Number,
-      prioridad: ''
+      prioridad: '',
+      tipo_documento:'',
+      nom_documento:''
     });
     this.rutaForm.setValue({
       destinoUno: [],

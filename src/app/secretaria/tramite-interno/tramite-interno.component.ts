@@ -213,6 +213,8 @@ export class TramiteInternoComponent implements OnInit {
     this.codigo = cod;
     this.rutaService.getRutaInterna(this.codigo).subscribe(
       (data: ResultRutaInterna) => {
+        console.log(data);
+        
         if (String(data.rutaInterna.cantidad) === "1") {
           document.getElementById('seleTwo')?.classList.remove('invi');
           document.getElementById('seleOne')?.classList.add('invi');

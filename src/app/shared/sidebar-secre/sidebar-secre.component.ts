@@ -10,8 +10,10 @@ import { SidebarSecreService } from '../../services/sidebar-secre.service';
 export class SidebarSecreComponent implements OnInit {
 
   menuItems?: any[];
+  personal:string='';
   constructor(private sidebarService: SidebarSecreService,private loginService:LoginService) {
-    this.menuItems = this.sidebarService.menu
+    this.menuItems = this.sidebarService.menu;
+    this.personal = sessionStorage.getItem('usuario')!;
   }
 
   ngOnInit(): void {

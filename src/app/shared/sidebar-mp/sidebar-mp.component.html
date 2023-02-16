@@ -9,14 +9,14 @@
           <ul id="sidebarnav">
               <li class="user-profile">
                   <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><img
-                          src="../../../assets/images/users/user-interface.png" alt="user" /><span class="hide-menu">Modulo Mesa de Partes
+                          src="../../../assets/images/users/user-interface.png" alt="user" /><span class="hide-menu">{{personal}}
                       </span></a>
                   <ul aria-expanded="false" class="collapse">
                       <li><a href="javascript:void()" (click)="logout()">Cerrar Sesion</a></li>
                   </ul>
               </li>
               <li class="nav-devider"></li>
-              <li class="nav-small-cap">PERSONAL</li>
+              <li class="nav-small-cap">Modulo Mesa de Partes</li>
               <li *ngFor="let item of menuItems">
                   <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false">
                       <i class={{item.icono}}></i>

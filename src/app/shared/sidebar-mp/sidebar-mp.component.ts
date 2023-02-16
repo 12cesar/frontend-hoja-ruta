@@ -10,8 +10,10 @@ import { SidebarMpService } from 'src/app/services/sidebar-mp.service';
 export class SidebarMpComponent implements OnInit {
 
   menuItems?: any[];
+  personal:string='';
   constructor(private sidebarService: SidebarMpService, private loginService:LoginService) {
-    this.menuItems = this.sidebarService.menu
+    this.menuItems = this.sidebarService.menu;
+    this.personal = sessionStorage.getItem('usuario')!;
   }
 
   ngOnInit(): void {
