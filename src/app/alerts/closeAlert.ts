@@ -20,3 +20,5 @@ const Delete = (id?:string,active?:string)=>{
         }
       })
 }
+
+

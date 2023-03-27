@@ -16,11 +16,17 @@ export class RespuestaService {
   putRespuestaInternoDerivado(formData:FormData):Observable<any>{
     return this.http.put(`${this.url}/interno/derivado`,formData)
   }
+  putRespuestaInternoDerivadoVarios(formData:FormData):Observable<any>{
+    return this.http.put(`${this.url}/interno/derivado-varios`,formData)
+  }
   putRespuestaInternoSinDerivado(formData:FormData):Observable<any>{
     return this.http.put(`${this.url}/interno/sin-derivado`,formData);
   }
   putRespuestaExternoDerivado(formData:FormData):Observable<any>{
     return this.http.put(`${this.url}/externo/derivado`,formData)
+  }
+  putRespuestaExternoDerivadoVarios(formData:FormData):Observable<any>{
+    return this.http.put(`${this.url}/externo/derivado-varios`,formData)
   }
   putRespuestaExternoSinDerivado(formData:FormData):Observable<any>{
     return this.http.put(`${this.url}/externo/sin-derivado`,formData);

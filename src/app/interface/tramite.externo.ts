@@ -21,6 +21,7 @@ export interface TramiteExterno {
     folio:            string;
     id_prioridad:     number;
     id_area:          number;
+    proveido:         string;
     TipoDocumento:    TipoDocumento;
 }
 

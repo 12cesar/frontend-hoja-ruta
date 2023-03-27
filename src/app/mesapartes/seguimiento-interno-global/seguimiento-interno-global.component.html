@@ -1,1 +1,149 @@
-<p>seguimiento-interno-global works!</p>
+<h4 class="card-title">Muted Table</h4>
+<h6 class="card-subtitle">Add class <code>.color-table .muted-table</code></h6>
+<div class="row justify-content-end mb-5">
+  <div class="col-lg-4">
+    <app-search (search)="buscar($event)"></app-search>
+  </div>
+</div>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Codigo Tramite</th>
+        <th>Asunto</th>
+        <th>Observacion</th>
+        <th>Fecha</th>
+        <th>Folio</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let ruta of listTramite! | paginate: { itemsPerPage: 5, currentPage: p }">
+        <td>{{ ruta.codigo_tramite }}</td>
+        <td>{{ ruta.TramiteInterno.asunto }}</td>
+        <td>{{ ruta.TramiteInterno.observacion }}</td>
+        <td>
+          {{ ruta.TramiteInterno.fecha }} - {{ ruta.TramiteInterno.hora }}
+        </td>
+        <td>{{ ruta.TramiteInterno.folio }}</td>
+        <td>
+          <div class="label label-table label-info">Derivado</div>
+        </td>
+        <td class="text-nowrap">
+          <a class="btn btn-circle btn-success ml-2" (click)="
+              obetenerDatos(
+                ruta.codigo_tramite,
+                ruta.TramiteInterno.asunto,
+                ruta.TramiteInterno.observacion,
+                ruta.TramiteInterno.fecha,
+                ruta.TramiteInterno.hora,
+                ruta.TramiteInterno.folio
+              )
+            " data-toggle="modal" data-target="#seguimientoModal">
+            <i class="fa fa-search"></i>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <pagination-controls class="text-right mt-3" (pageChange)="p = $event"></pagination-controls>
+</div>
+
+<div class="modal fade" id="seguimientoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  data-keyboard="false" data-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Seguimiento Tramite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelar()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="formSeguimiento">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-lg-12">
+                <input type="text" id="firstName" class="float-right" formControlName="fecha" />
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="" class="control-label">Tramite Interno N°</label>
+            <input type="text" id="firstName" class="form-control" formControlName="codigo_tramite"/>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Asunto</label>
+            <input type="text" id="firstName" class="form-control" formControlName="asunto" />
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">Observacion</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5" formControlName="observacion"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="control-label">Folio</label>
+            <input type="text" id="firstName" class="form-control" formControlName="folio" />
+          </div>
+        </form>
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ruta</h5>
+        </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Codigo</th>
+                <th>Destino</th>
+                <th>Fecha Derivado</th>
+                <th>Hora Derivado</th>
+                <th>Fecha Recepcionado</th>
+                <th>Hora Recepcionado</th>
+                <th>Respuesta</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let seguimiento of listSeguimiento">
+                <td>{{seguimiento.id_derivacion}}</td>
+                <td>{{seguimiento.DerivacionInterna.Area.nombre}}</td>
+                <td>{{seguimiento.fecha_derivacion}}</td>
+                <td>{{seguimiento.hora_derivacion}}</td>
+                <td>{{seguimiento.fecha_recepcion}}</td>
+                <td>{{seguimiento.hora_recepcion}}</td>
+                <td *ngIf="!seguimiento.DerivacionInterna.Respuestum">
+                  <div class="label label-table label-danger">En Proceso</div>
+                </td>
+                <td *ngIf="seguimiento.DerivacionInterna.Respuestum?.id===1">
+                  <div class="label label-table label-info">Derivado</div>
+                </td>
+                <td *ngIf="seguimiento.DerivacionInterna.Respuestum?.id===2">
+                  <div class="label label-table label-success">Archivado</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Observaciones</h5>
+        </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Codigo</th>
+                <th>Destino</th>
+                <th>Observaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let seguimiento of listSeguimiento">
+                <td>{{seguimiento.id_derivacion}}</td>
+                <td>{{seguimiento.DerivacionInterna.Area.nombre}}</td>
+                <td>{{seguimiento.DerivacionInterna.observacion}}</td>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -291,6 +291,14 @@ export class SeguimientoDerivacionInternoComponent implements OnInit {
       fecha:'',
       hora:'',
       folio:''
-    })
+    });
+    this.formRespuesta = this.fb.group({
+      respuesta:'',
+      observacion:'',
+      accion:'',
+      destino:[[]]
+    });
+    this.tipoRespuesta="";
+    document.getElementById('selectOne')?.classList.add('invi');
   }
 }

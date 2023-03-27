@@ -13,7 +13,7 @@ export class DerivarInternoService {
   postDerivar(formData:FormData):Observable<any>{
     return this.http.post(this.url,formData);
   }
-  getDerivaciones():Observable<any>{
-    return this.http.get(this.url);
+  getDerivaciones(buscar:string=''):Observable<any>{
+    return this.http.get(this.url,{params:{buscar}});
   }
 }

@@ -18,6 +18,9 @@ export class RutaExternaService {
   getTramiteDerivado(buscar:string):Observable<any>{
     return this.http.get(`${this.url}/tramite/derivado`,{params:{buscar}});
   }
+  getTramiteExternoGeneral(buscar:string):Observable<any>{
+    return this.http.get(`${this.url}/tramite/externo/general`,{params:{buscar}});
+  }
   getRutaExterna(codigo:string):Observable<any>{
     return this.http.get(`${this.url}/${codigo}`)
   }

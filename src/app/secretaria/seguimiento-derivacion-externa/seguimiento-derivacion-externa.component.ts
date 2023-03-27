@@ -29,8 +29,12 @@ export class SeguimientoDerivacionExternaComponent implements OnInit {
   tipoRespuesta?:string;
   dropdownSettings:IDropdownSettings = {};
   dropdownList =[{}];
+  dropdownSettingsCopia: IDropdownSettings = {};
+  dropDownListCopia = [{}];
   formSeguimiento:FormGroup;
   formRespuesta:FormGroup;
+  p: number = 1;
+  busca:string='';
   constructor(
     private derivacionService:DerivacionExternaService,
     private seguimientoExterno:SerguimientoExternoService,
@@ -52,7 +56,8 @@ export class SeguimientoDerivacionExternaComponent implements OnInit {
       respuesta:['',Validators.required],
       observacion:[''],
       accion:[''],
-      destino:[[]]
+      destino:[[]],
+      destinoDos: [[]],
     })
   }
 
@@ -70,11 +75,21 @@ export class SeguimientoDerivacionExternaComponent implements OnInit {
       allowSearchFilter: true,
       closeDropDownOnSelection: false
     };
+    this.dropdownSettingsCopia = {
+      singleSelection: false,
+      idField: 'id',
+      textField: 'nombre',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 3,
+      allowSearchFilter: true,
+    };
   }
   mostrarDerivacion(){
-    this.derivacionService.getDerivaciones().subscribe(
+    this.derivacionService.getDerivaciones(this.busca).subscribe(
       (data:ResultDerivacionExternas)=>{
         this.listDerivacion = data.derivacion;
+        console.log(data);
 
       },
       (error)=>{
@@ -229,6 +244,60 @@ export class SeguimientoDerivacionExternaComponent implements OnInit {
 
      }
 
+    }else if (this.tipoRespuesta === '3') {
+      if (
+        this.idDerivado !== 0 &&
+        this.formRespuesta.get('accion')?.value !== '' &&
+        this.formRespuesta.get('destinoDos')?.value.length >= 1
+      ) {
+        const formData = new FormData();
+        formData.append('codigo_tramite', this.codigoTramite!);
+        formData.append('id_derivacion', String(this.idDerivado));
+        formData.append(
+          'id_respuesta',
+          this.formRespuesta.get('respuesta')?.value
+        );
+        const mostrar = this.formRespuesta.get('destinoDos')?.value;
+        let id_destino = '';
+        for (let i = 0; i < mostrar.length; i++) {
+
+            id_destino += mostrar[i].id+`${(mostrar.length-1 === i) ? '':','}`;
+        }
+        formData.append('id_destino', String(id_destino));
+        formData.append('accion', this.formRespuesta.get('accion')?.value);
+        formData.append(
+          'observacion',
+          this.formRespuesta.get('observacion')?.value
+        );
+        console.log(id_destino);
+
+        this.respuestaService.putRespuestaExternoDerivadoVarios(formData).subscribe(
+          (data)=>{
+            this.mostrarDerivacion();
+            console.log(data);
+            this.idDerivado =0;
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: 'Respuesta generado con exito',
+              showConfirmButton: false,
+              timer: 1500
+            })
+          },(error)=>{
+            console.log(error);
+
+          }
+        )
+      } else {
+        console.log('Selecciona un nuevo tramite');
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'Todos los campos son requeridos',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
     }else{
       console.log('error');
     }
@@ -239,18 +308,28 @@ export class SeguimientoDerivacionExternaComponent implements OnInit {
     console.log(codigo);
 
   }
+  buscar(valor:any){
+    console.log(valor);
+    this.busca = valor;
+    this.mostrarDerivacion();
+  }
   verTipoRuta(event:any){
     this.tipoRespuesta = event.target.value;
-    if (event.target.value !== "" && event.target.value === "1") {
-
+    if (event.target.value !== '' && event.target.value === '1') {
       document.getElementById('selectOne')?.classList.remove('invi');
+      document.getElementById('selectTwo')?.classList.add('invi');
     }
-    if (event.target.value !== "" && event.target.value=== '2') {
-
+    if (event.target.value !== '' && event.target.value === '2') {
+      document.getElementById('selectOne')?.classList.add('invi');
+      document.getElementById('selectTwo')?.classList.add('invi');
+    }
+    if (event.target.value !== '' && event.target.value === '3') {
+      document.getElementById('selectTwo')?.classList.remove('invi');
       document.getElementById('selectOne')?.classList.add('invi');
     }
-    if (event.target.value === "") {
+    if (event.target.value === '') {
       document.getElementById('selectOne')?.classList.add('invi');
+      document.getElementById('selectTwo')?.classList.add('invi');
     }
   }
   recepcionar(id:number){
@@ -261,7 +340,7 @@ export class SeguimientoDerivacionExternaComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: 'Si, recepcionar'
     }).then((result) => {
       if (result.isConfirmed) {
         this.seguimientoExterno.putSeguimientoExterno(id).subscribe(
@@ -292,7 +371,17 @@ export class SeguimientoDerivacionExternaComponent implements OnInit {
       fecha:'',
       hora:'',
       folio:''
-    })
+    });
+    this.formRespuesta = this.fb.group({
+      respuesta:'',
+      observacion:'',
+      accion:'',
+      destino:[[]],
+      destinoDos: [[]],
+    });
+    this.tipoRespuesta="";
+    document.getElementById('selectOne')?.classList.add('invi');
+    document.getElementById('selectTwo')?.classList.add('invi');
   }
 
 }

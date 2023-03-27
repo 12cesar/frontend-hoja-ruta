@@ -18,6 +18,9 @@ export class RutaInternaService {
   getTramiteDerivado(buscar:string):Observable<any>{
     return this.http.get(`${this.url}/tramite/derivado`,{params:{buscar}});
   }
+  getTramiteInternoGeneral(buscar:string):Observable<any>{
+    return this.http.get(`${this.url}/tramite/interno/general`,{params:{buscar}});
+  }
   getRutaInterna(codigo:string):Observable<any>{
     return this.http.get(`${this.url}/${codigo}`)
   }

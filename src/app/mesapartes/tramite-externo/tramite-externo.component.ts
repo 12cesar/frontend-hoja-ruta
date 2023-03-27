@@ -58,7 +58,6 @@ export class TramiteExternoComponent implements OnInit {
     private tipoDocumentoService:TipoDocumentoService
   ) {
     this.tramiteForm = this.fb.group({
-      proveido:[Number,Validators.required],
       asunto: ['', Validators.required],
       observacion: [''],
       folio: [Number, Validators.required],
@@ -319,7 +318,9 @@ export class TramiteExternoComponent implements OnInit {
           asunto: data.tramiteExterno.asunto,
           observacion: data.tramiteExterno.observacion,
           folio: data.tramiteExterno.folio,
-          prioridad: data.tramiteExterno.id_prioridad
+          prioridad: data.tramiteExterno.id_prioridad,
+          tipo_documento:data.tramiteExterno.tipo_documento,
+          nom_documento:data.tramiteExterno.nom_documento,
         });
       },
       (error)=>{
@@ -343,12 +344,11 @@ export class TramiteExternoComponent implements OnInit {
         (data) => {
           this.tramiteForm.setValue({
             asunto: '',
-            proveido:Number,
-            observacion: '',
-            folio: Number,
-            prioridad: '',
-            tipo_documento:'',
-            nom_documento:''
+          observacion: '',
+          folio: Number,
+          prioridad: '',
+          tipo_documento:'',
+          nom_documento:'',
           })
           this.mostrarTramite();
           Swal.fire({
@@ -414,12 +414,11 @@ export class TramiteExternoComponent implements OnInit {
     this.title ='Crear Tramite'
     this.tramiteForm.setValue({
       asunto: '',
-      proveido:Number,
-      observacion: '',
-      folio: Number,
-      prioridad: '',
-      tipo_documento:'',
-      nom_documento:''
+          observacion: '',
+          folio: Number,
+          prioridad: '',
+          tipo_documento:'',
+          nom_documento:'',
     });
     this.rutaForm.setValue({
       destinoUno: [],

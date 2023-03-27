@@ -1,10 +1,13 @@
-<h4 class="card-title">Muted Table</h4>
-<h6 class="card-subtitle">Add class <code>.color-table .muted-table</code></h6>
+<div class="row justify-content-end mb-5">
+  <div class="col-lg-4">
+    <app-search (search)="buscar($event)"></app-search>
+  </div>
+</div>
 <div class="table-responsive">
   <table class="table">
     <thead>
       <tr>
-        <th>Tramite Interno</th>
+        <th>Tramite Externo N°</th>
         <th>Asunto</th>
         <th>Observacion</th>
         <th>Registrado</th>
@@ -14,7 +17,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let tramite of listDerivacion">
+      <tr *ngFor="let tramite of listDerivacion! | paginate: { itemsPerPage: 7, currentPage: p }">
         <td>{{ tramite.codigo_tramite }}</td>
         <td>{{ tramite.TramiteExterno.asunto }}</td>
         <td>{{ tramite.TramiteExterno.observacion }}</td>
@@ -54,6 +57,7 @@
       </tr>
     </tbody>
   </table>
+  <pagination-controls class="text-right mt-3" (pageChange)="p = $event"></pagination-controls>
 </div>
 <div class="modal fade" id="respuestaModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
   data-keyboard="false" data-backdrop="static">
@@ -94,16 +98,26 @@
                   <option *ngFor="let accion of listAcciones" value="{{accion.id}}">{{accion.nombre}}</option>
               </select>
             </div>
+          </div>
+          <div class="invi" id="selectTwo">
+            <div class="form-group" id="seleTwo">
+              <label class="control-label">Seleccionar Areas</label>
+              <ng-multiselect-dropdown [placeholder]="'Seleccionar los destinos'"
+                  [settings]="dropdownSettingsCopia" [data]="listArea!" formControlName="destinoDos">
+              </ng-multiselect-dropdown>
+            </div>
             <div class="form-group">
-              <label for="exampleFormControlTextarea1">Observacion</label>
-              <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" formControlName="observacion"></textarea>
+              <label class="control-label">Seleccionar Accion</label>
+              <select class="form-control custom-select" formControlName="accion" data-placeholder="Choose a Category" tabindex="1">
+                  <option value="">Seleccionar accion</option>
+                  <option *ngFor="let accion of listAcciones" value="{{accion.id}}">{{accion.nombre}}</option>
+              </select>
             </div>
           </div>
-
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal"
                 (click)="cancelar()">Cerrar</button>
-            <button type="submit" class="btn btn-primary" [disabled]="formRespuesta.invalid">Crear Ruta</button>
+            <button type="submit" class="btn btn-primary" [disabled]="formRespuesta.invalid">Crear Respuesta</button>
         </div>
         </form>
 
