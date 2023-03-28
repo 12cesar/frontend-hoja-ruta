@@ -19,6 +19,7 @@ export class DerivacionInternoComponent implements OnInit {
   listRuta?: RutaInterna[];
   listAcciones?:Accione[];
   rutaForm={
+    id_ruta:0,
     codigo:'',
     destino:''
   }
@@ -60,10 +61,11 @@ export class DerivacionInternoComponent implements OnInit {
       }
     )
   }
-  obtenerDatos(codigo:string,destino:string){
+  obtenerDatos(id_ruta:any,codigo:string,destino:string){
     this.rutaForm={
       codigo,
-      destino
+      destino,
+      id_ruta
     }
 
   }
@@ -73,13 +75,17 @@ export class DerivacionInternoComponent implements OnInit {
       formData.append('observacion',this.derivacionForm.get('observacion')?.value);
       formData.append('id_accion',this.derivacionForm.get('accion')?.value);
       formData.append('codigo_tramite',this.rutaForm.codigo);
+      formData.append('id_ruta', String(this.rutaForm.id_ruta));
       formData.append('destino',this.rutaForm.destino);
       this.derivarService.postDerivar(formData).subscribe(
         (data)=>{
-          this.mostrarRutas();
+          this.mostrarRutas();       
+          console.log(data);
+             
           this.rutaForm={
             codigo:'',
-            destino:''
+            destino:'',
+            id_ruta:0
           }
            Swal.fire({
             position: 'top-end',
@@ -112,7 +118,8 @@ export class DerivacionInternoComponent implements OnInit {
     });
     this.rutaForm={
       codigo:'',
-      destino:''
+      destino:'',
+      id_ruta:0
     }
   }
 }

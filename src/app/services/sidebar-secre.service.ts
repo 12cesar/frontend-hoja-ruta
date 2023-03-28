@@ -15,10 +15,16 @@ export class SidebarSecreService {
       ]
     },
     {
-      titulo: 'Derivaciones',
+      titulo: 'Derivacion Interna',
       icono: 'mdi mdi-call-received',
       submenu: [
         { titulo: 'Derivacion Interna', url: 'seguimiento-derivacion-interno' },
+      ]
+    },
+    {
+      titulo: 'Derivacion Externa',
+      icono: 'mdi mdi-call-received',
+      submenu: [
         { titulo: 'Derivacion Externa', url: 'seguimiento-derivacion-externa' },
       ]
     },

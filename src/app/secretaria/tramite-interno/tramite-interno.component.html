@@ -24,20 +24,25 @@
         </thead>
         <tbody>
             <tr *ngFor="let tramite of listTramiteInterno! | paginate: { itemsPerPage: 5, currentPage: p }">
-                <td>{{tramite.codigo_documento}}</td>
-                <td>{{tramite.asunto}}</td>
-                <td>{{tramite.observacion}}</td>
-                <td>{{tramite.registrado}}</td>
-                <td>{{tramite.folio}}</td>
-                <td>{{tramite.fecha}} - {{tramite.hora}}</td>
+                <td style="width: 100px;">{{tramite.codigo_documento}}</td>
+                <td style="width: 300px;">{{tramite.asunto}}</td>
+                <td style="width: 300px;">{{tramite.observacion}}</td>
+                <td style="width: 150px;">{{tramite.registrado}}</td>
+                <td style="width: 100px;">{{tramite.folio}}</td>
+                <td style="width: 150px;">{{tramite.fecha}} - {{tramite.hora}}</td>
                 <td class="text-nowrap">
-                    <a class="btn btn-circle btn-success ml-2" (click)="agregarCodigo(tramite.codigo_documento)"
+                    <!-- <a class="btn btn-circle btn-success ml-2" (click)="agregarCodigo(tramite.codigo_documento)"
                         data-toggle="modal" data-target="#modalRuta" data-whatever="@mdo"> <i
-                            class="fa fa-road"></i></a>
-                    <a href="{{api}}?codigo={{tramite.codigo_documento}}" class="btn btn-circle btn-info ml-2" target="_blank" >
-                        <i class="fa fa-file-pdf-o"></i> </a>
-                    <a class="btn btn-circle btn-warning ml-2" (click)="obtenerDatos(tramite.codigo_documento)" data-toggle="modal" data-target="#modalTramite"
-                        data-whatever="@mdo"> <i class="fa fa-pencil"></i> </a>
+                            class="fa fa-road"></i></a> -->
+                    <button class="btn btn-success mr-2 waves-effect waves-light" type="button" (click)="agregarCodigo(tramite.codigo_documento)"
+                    data-toggle="modal" data-target="#modalRuta" data-whatever="@mdo"><span class="btn-label"><i class="fa fa fa-road"></i></span>Ruta</button>
+                    <a href="{{api}}?codigo={{tramite.codigo_documento}}" class="btn btn-info waves-effect waves-light mr-2" target="_blank" >
+                        <span class="btn-label"><i class="fa fa-file-pdf-o"></i></span>Documento</a>
+                   <!--  <button  class="btn btn-info waves-effect waves-light" type="button" ><span class="btn-label"><i class="fa fa-heart"></i></span>Heart</button> -->
+                    <!-- <a class="btn btn-circle btn-warning ml-2" (click)="obtenerDatos(tramite.codigo_documento)" data-toggle="modal" data-target="#modalTramite"
+                        data-whatever="@mdo"> <i class="fa fa-pencil"></i> </a> -->
+                    <button  class="btn btn-warning waves-effect waves-light" type="button" (click)="obtenerDatos(tramite.codigo_documento)" data-toggle="modal" data-target="#modalTramite"
+                    data-whatever="@mdo"><span class="btn-label"><i class="fa fa-pencil"></i></span>Editar</button>
 
                 </td>
             </tr>
@@ -47,7 +52,7 @@
     <pagination-controls class="text-right mt-3" (pageChange)="p = $event"></pagination-controls>
 </div>
 
-<div class="modal fade" id="modalTramite" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+<!-- <div class="modal fade" id="modalTramite" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
     data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -88,7 +93,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <div class="modal fade" id="modalTramite" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
     data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-lg">
@@ -141,7 +146,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Generar Tramite</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Generar Ruta</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="cancelar()">
                     <span aria-hidden="true">&times;</span>
                 </button>

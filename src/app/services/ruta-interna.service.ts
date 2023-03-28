@@ -21,10 +21,13 @@ export class RutaInternaService {
   getTramiteInternoGeneral(buscar:string):Observable<any>{
     return this.http.get(`${this.url}/tramite/interno/general`,{params:{buscar}});
   }
-  getRutaInterna(codigo:string):Observable<any>{
-    return this.http.get(`${this.url}/${codigo}`)
+  getRutaInterna(id_ruta:number):Observable<any>{
+    return this.http.get(`${this.url}/${id_ruta}`)
   }
   postRutaInterna(data:EnvioTramiteInterno):Observable<any>{
     return this.http.post(this.url,data);
+  }
+  putRutaInterna(id:number,data:EnvioTramiteInterno):Observable<any>{
+    return this.http.put(`${this.url}/${id}`,data);
   }
 }

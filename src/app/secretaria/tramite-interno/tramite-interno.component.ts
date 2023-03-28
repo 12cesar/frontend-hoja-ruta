@@ -64,8 +64,7 @@ export class TramiteInternoComponent implements OnInit {
     this.rutaForm = this.fb.group({
       destinoUno: [[]],
       destinoDos: [[]],
-      cantidad: ['', Validators.required],
-
+      cantidad: ['', Validators.required]
     })
   }
 
@@ -209,8 +208,7 @@ export class TramiteInternoComponent implements OnInit {
     }
   }
   agregarCodigo(cod: string) {
-    console.log(cod);
-    this.codigo = cod;
+/*     this.codigo = cod;
     this.rutaService.getRutaInterna(this.codigo).subscribe(
       (data: ResultRutaInterna) => {
         console.log(data);
@@ -243,7 +241,7 @@ export class TramiteInternoComponent implements OnInit {
         console.log(error);
 
       }
-    )
+    ) */
 
   }
   obtenerDatos(cod:string){
