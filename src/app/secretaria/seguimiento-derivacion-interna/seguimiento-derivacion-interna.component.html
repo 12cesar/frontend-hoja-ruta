@@ -112,6 +112,16 @@
                   <option *ngFor="let accion of listAcciones" value="{{accion.id}}">{{accion.nombre}}</option>
               </select>
             </div>
+           
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">Observacion</label>
+            <textarea
+              class="form-control"
+              id="exampleFormControlTextarea1"
+              rows="3"
+              formControlName="observacion"
+            ></textarea>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal"

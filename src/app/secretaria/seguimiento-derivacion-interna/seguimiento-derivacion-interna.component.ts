@@ -170,6 +170,7 @@ export class SeguimientoDerivacionInternaComponent implements OnInit {
         const formData = new FormData();
         formData.append('codigo_tramite', this.codigoTramite!);
         formData.append('id_derivacion', String(this.idDerivado));
+        formData.append('observacion', this.formRespuesta.get('observacion')?.value);
         formData.append(
           'id_respuesta',
           this.formRespuesta.get('respuesta')?.value
@@ -223,6 +224,7 @@ export class SeguimientoDerivacionInternaComponent implements OnInit {
           'id_respuesta',
           this.formRespuesta.get('respuesta')?.value
         );
+        formData.append('observacion', this.formRespuesta.get('observacion')?.value);
         this.respuestaService
           .putRespuestaInternoSinDerivado(formData)
           .subscribe(
@@ -265,6 +267,7 @@ export class SeguimientoDerivacionInternaComponent implements OnInit {
           'id_respuesta',
           this.formRespuesta.get('respuesta')?.value
         );
+        formData.append('observacion', this.formRespuesta.get('observacion')?.value);
         const mostrar = this.formRespuesta.get('destinoDos')?.value;
         let id_destino = '';
         for (let i = 0; i < mostrar.length; i++) {
