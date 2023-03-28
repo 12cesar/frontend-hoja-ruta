@@ -31,6 +31,7 @@ export class SeguimientoInternoComponent implements OnInit {
   listArea: Area[] = [];
   rutaForm: FormGroup;
   ruta: number = 0;
+  codigo:string='';
   listAcciones?: Accione[];
   constructor(
     private rutaInterna: RutaInternaService,
@@ -151,8 +152,9 @@ export class SeguimientoInternoComponent implements OnInit {
       }
     )
   }
-  obtenerRuta(id: number) {
+  obtenerRuta(id: number, cod:string) {
     this.ruta = id;
+    this.codigo = cod;
     this.rutaService.getRutaInterna(this.ruta).subscribe(
       (data: ResultRutaInterna) => {
         console.log(data);
@@ -200,7 +202,8 @@ export class SeguimientoInternoComponent implements OnInit {
         cantidad,
         id: this.ruta,
         id_destino: destinoUno,
-        accion
+        accion,
+        codigo:this.codigo
       }
       this.rutaService.putRutaInterna(this.ruta, envio).subscribe(
         (data) => {
@@ -230,7 +233,8 @@ export class SeguimientoInternoComponent implements OnInit {
         cantidad,
         id: this.ruta,
         id_destino: destinoDos,
-        accion
+        accion,
+        codigo:this.codigo
       }
       this.rutaService.putRutaInterna(this.ruta, envio).subscribe(
         (data) => {
@@ -315,7 +319,9 @@ export class SeguimientoInternoComponent implements OnInit {
       destinoDos: [[]],
       cantidad: '',
       accion: ''
-    })
+    });
+    this.codigo = '';
+    this.ruta = 0
   }
 
 }

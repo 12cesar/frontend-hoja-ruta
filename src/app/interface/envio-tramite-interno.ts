@@ -8,7 +8,8 @@ export interface EnvioTramiteInternoDos{
     cantidad:string,
     id?:number,
     id_destino:EnvioDestino[],
-    accion:string
+    accion:string;
+    codigo:string;
 }
 
 export interface EnvioTramiteExterno{

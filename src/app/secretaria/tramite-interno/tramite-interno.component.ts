@@ -95,6 +95,8 @@ export class TramiteInternoComponent implements OnInit {
   mostrarTramite() {
     this.tramiteInterService.getTramiteInternos(this.busca).subscribe(
       (data: ResultTramiteInternos) => {
+        console.log(data);
+
         this.listTramiteInterno = data.tramiteInterno;
       },
       (error) => {
@@ -208,11 +210,11 @@ export class TramiteInternoComponent implements OnInit {
     }
   }
   agregarCodigo(cod: string) {
-/*     this.codigo = cod;
-    this.rutaService.getRutaInterna(this.codigo).subscribe(
+    this.codigo = cod;
+    this.rutaService.getRutaInternaCodigo(this.codigo).subscribe(
       (data: ResultRutaInterna) => {
         console.log(data);
-        
+
         if (String(data.rutaInterna.cantidad) === "1") {
           document.getElementById('seleTwo')?.classList.remove('invi');
           document.getElementById('seleOne')?.classList.add('invi');
@@ -241,7 +243,7 @@ export class TramiteInternoComponent implements OnInit {
         console.log(error);
 
       }
-    ) */
+    )
 
   }
   obtenerDatos(cod:string){
@@ -259,10 +261,10 @@ export class TramiteInternoComponent implements OnInit {
       },
       (error)=>{
         console.log(error);
-        
+
       }
     )
-    
+
   }
   verTipoRuta(event: any) {
     if (event.target.value !== "" && event.target.value === "1") {

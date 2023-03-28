@@ -34,10 +34,16 @@ export interface TramiteInterno {
     folio:            string;
     id_prioridad:     number;
     id_area:          number;
+    Prioridad:        Prioridad;
 }
 
 export interface Area {
     id:     number;
     nombre: string;
+}
+export interface Prioridad {
+  id:     number;
+  nombre: string;
+  estado: number;
 }
 

@@ -24,6 +24,9 @@ export class RutaInternaService {
   getRutaInterna(id_ruta:number):Observable<any>{
     return this.http.get(`${this.url}/${id_ruta}`)
   }
+  getRutaInternaCodigo(codigo:string):Observable<any>{
+    return this.http.get(`${this.url}/codigo/${codigo}`)
+  }
   postRutaInterna(data:EnvioTramiteInterno):Observable<any>{
     return this.http.post(this.url,data);
   }
